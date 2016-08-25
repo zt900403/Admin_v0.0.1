@@ -4,9 +4,6 @@
       <env name="DEBUG" value="Admin_v0.0.1:*" />
     </envs>
     <browser url="http://localhost:3000/" />
-    <EXTENSION ID="com.jetbrains.nodejs.run.NodeJSStartBrowserRunConfigurationExtension">
-      <browser url="http://localhost:3000/" />
-    </EXTENSION>
     <method />
   </configuration>
 </component>
