@@ -1,0 +1,26 @@
+{
+  "name": "Admin",
+  "authors": [
+    "zhangtao <zhangtao_43@163.com>"
+  ],
+  "description": "Admin 0.0.1",
+  "main": "",
+  "license": "MIT",
+  "homepage": "",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "jquery": "^3.1.0",
+    "bootstrap": "^3.3.7",
+    "metisMenu": "^2.5.2",
+    "font-awesome": "^4.6.3",
+    "angular-ui-grid": "^3.2.1",
+    "angular": "angularjs#^1.5.8"
+  }
+}
