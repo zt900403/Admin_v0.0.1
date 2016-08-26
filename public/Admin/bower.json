@@ -21,6 +21,9 @@
     "metisMenu": "^2.5.2",
     "font-awesome": "^4.6.3",
     "angular-ui-grid": "^3.2.1",
-    "angular": "angularjs#^1.5.8"
+    "angular-resource": "^1.5.8",
+    "angular": "^1.5.8",
+    "angular-route": "^1.5.8",
+    "angular-moment": "^0.10.3"
   }
 }
