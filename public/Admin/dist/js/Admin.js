@@ -44,4 +44,15 @@ $(function() {
 });
 
 
-var app = angular.module('AdminApp', ['ngRoute','ui.grid','ui.grid.resizeColumns','ui.grid.edit','ui.grid.exporter','ui.grid.pagination']);
+var app = angular.module('AdminApp', ['ngRoute','ui.grid','ui.grid.resizeColumns','ui.grid.edit','ui.grid.exporter','ui.grid.pagination']).
+    run(function ($window, $rootScope, $http, $location) {
+    $http({
+        url: '/Admin/api/validate',
+        method: 'GET'
+    }).success(function (user) {
+        $rootScope.me = user;
+        $location.path('/');
+    }).error(function (data) {
+        $location.path('/login');
+    });
+});

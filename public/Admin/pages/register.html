@@ -1,4 +1,4 @@
-<div class="container">
+<div class="container" ng-controller="RegisterCtrl">
     <div class="row">
         <div class="col-md-4 col-md-offset-4">
             <div class="login-panel panel panel-default">
@@ -6,27 +6,33 @@
                     <h3 class="panel-title">请注册&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;
                         &emsp;&emsp;均为必填项</h3>
                 </div>
-                <div class="panel-body">
-                    <form role="form">
+                <div ng-include="'./pages/elements/messagebox.html'"></div>
+                <div class="panel-body" >
+                    <form role="form"   ng-submit="register()">
                         <fieldset>
                             <div class="form-group">
-                                <input class="form-control" placeholder="帐号"　name="user" type="text">
+                                <input class="form-control" required ng-model="user.user" placeholder="帐号"　name="user" type="text">
                                 <p class="help-block">8字符以上.</p>
                             </div>
                             <div class="form-group">
-                                <input class="form-control" placeholder="密码" name="pass1" type="password" >
+                                <input class="form-control" required ng-model="user.PWD" placeholder="密码" name="pass1" type="password" >
                                 <p class="help-block">8字符以上.</p>
                             </div>
                             <div class="form-group">
-                                <input class="form-control" placeholder="确认密码" name="pass2" type="password" >
+                                <input class="form-control" required ng-model="user.PWD2" placeholder="确认密码" name="pass2" type="password" >
                                 <p class="help-block">请与第一次输入密码一致.</p>
                             </div>
+                            <div class="form-group col-md-offset-8" >
+                                <a style="text-decoration:none" href="/Admin/#/login">返回登陆页面</a>
+                            </div>
+                            <!--
                             <div class="form-group">
                                 <input class="form-control" placeholder="部门" name="department" type="text" >
                                 <p class="help-block">请填写您所在部门.</p>
                             </div>
+                            -->
                             <!-- Change this to a button or input when using this as a form -->
-                            <a href="index.html" class="btn btn-lg btn-success btn-block">注&emsp;册</a>
+                            <button  type="submit" class="btn btn-lg btn-success btn-block">注&emsp;册</button>
                         </fieldset>
                     </form>
                 </div>

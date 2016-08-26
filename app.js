@@ -8,8 +8,10 @@ var session = require('express-session');
 var MongoStore = require('connect-mongo')(session);
 var fs = require('fs');
 
+
 var routes = require('./routes/index');
 var users = require('./routes/users');
+var noauthAPI = require('./routes/noauthAPI');
 
 var app = express();
 
@@ -32,16 +34,17 @@ if (app.get('env') === 'development') {
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieParser("keyboard cat"));
-app.use(express.static(path.join(__dirname, 'public')));
 app.use(session({
-        secret: 'keyboard cat',
-        resave: false,
-        saveUninitialized: false,
-        cookie: { maxAge: 1*60*60*1000 },
-        store: new MongoStore({
+    secret: 'keyboard cat',
+    resave: false,
+    saveUninitialized: false,
+    cookie: { maxAge: 1*60*60*1000 },
+    store: new MongoStore({
         url: 'mongodb://zt900403:zhangtao43@localhost/AdminApp'
     })
 }));
+app.use(express.static(path.join(__dirname, 'public')));
+app.use('/Admin/api', noauthAPI);
 
 
 app.use('/', routes);
