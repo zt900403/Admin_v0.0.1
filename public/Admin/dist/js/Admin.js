@@ -49,8 +49,7 @@ var app = angular.module('AdminApp', ['ngRoute','ui.grid','ui.grid.resizeColumns
     $http({
         url: '/Admin/api/validate',
         method: 'GET'
-    }).success(function (user) {
-        $rootScope.me = user;
+    }).success(function (result) {
         $location.path('/');
     }).error(function (data) {
         $location.path('/login');
