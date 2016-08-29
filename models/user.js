@@ -1,15 +1,37 @@
 /**
  * Created by Lenovo on 2016/8/26.
  */
-var mongoose = require('mongoose')
-var Schema = mongoose.Schema
+var mongoose = require('mongoose');
 
-var User = new Schema({
-    id: Number,
-    user: String,
-    PWD: String,
-    salt: String,
-    CTime: Date,                //create time
+var IdGenerator = require('./IdGenerator');
+
+
+var Schema = mongoose.Schema;
+
+
+var userSchema = new Schema({
+    id: {
+        type: Number,
+        required: true,
+        unique: true
+    },
+    user: {
+        type: String,
+        required: true,
+        unique: true
+    },
+    PWD: {
+        type: String,
+        required: true,
+    },
+    salt: {
+        type: String,
+        required: true,
+    },
+    CTime: {                    //create time
+        type: Date,
+        default: Date.now()
+    },
     LLTime: Date,               //Last login time
     files: [String],			//the files of you create
     filesRights:{
@@ -21,21 +43,19 @@ var User = new Schema({
     Mobile: Number,
     email: String,
     department: String,
-    online: Boolean,
-    role: String                //admin,normal,inactive
+    online: {
+        type: Boolean,
+        default: false
+    },
+    role: {
+        type: String,
+        default: 'normal'
+    }                //admin,normal,inactive
+
+},{
+    versionKey: false           // You should be aware of the outcome after set to false
 });
 
-User.statics.findUserById = function(userid, callback) {
-    this.findOne({
-        id: userid
-    }, callback);
-};
 
-User.statics.assign = function(obj) {
-    for (var key in obj) {
-        this[key] = obj[key];
-    }
-    return this;
-}
 
-module.exports = User;
+module.exports = userSchema;

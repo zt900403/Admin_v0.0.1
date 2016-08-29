@@ -33,3 +33,5 @@ npm-debug.log
 node_modules
 var
 public/Admin/bower_components
+startupMongoDB.bat
+startupMongoDBShell.bat

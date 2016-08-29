@@ -12,6 +12,7 @@ var fs = require('fs');
 var routes = require('./routes/index');
 var users = require('./routes/users');
 var noauthAPI = require('./routes/noauthAPI');
+var authAPI = require('./routes/authAPI');
 
 var app = express();
 
@@ -45,7 +46,7 @@ app.use(session({
 }));
 app.use(express.static(path.join(__dirname, 'public')));
 app.use('/Admin/api', noauthAPI);
-
+app.use('/Admin/api/auth', authAPI.basicAuth, authAPI);
 
 app.use('/', routes);
 app.use('/users', users);
