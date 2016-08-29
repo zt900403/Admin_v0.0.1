@@ -7,11 +7,15 @@ angular.module('AdminApp').config(function($routeProvider) {
     }).
     when('/login', {
         templateUrl: '/Admin/pages/login.html',
-      controller: 'LoginCtrl'
+        controller: 'LoginCtrl'
     }).
     when('/register', {
         templateUrl: '/Admin/pages/register.html',
-        controller: 'LoginCtrl'
+        controller: 'RegisterCtrl'
+    }).
+    when('/tableConfig', {
+        templateUrl: '/Admin/pages/tableConfig.html',
+        controller: 'TableConfigCtrl'
     }).
     otherwise({
         redirectTo: '/login'

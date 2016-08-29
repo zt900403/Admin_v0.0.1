@@ -30,20 +30,32 @@ User.prototype.save = function(fn) {
 };
 
 
-User.prototype.findUserById = function(userid, fn) {
+User.findUserById = function(userid, fn) {
     db.user.findOne({
         id: userid
     }, fn);
 };
 
-User.prototype.findUserByUser = function(user, fn) {
+User.findUserByUser = function(user, fn) {
     db.user.findOne({
         user: user
     }, fn);
 };
 
-User.prototype.loginByUser = function(user, fn) {
-    this.findUserByUser(user.user, function(err, one) {
+User.findOneAndUpdateByUser = function(user, update, fn) {
+    db.user.findOneAndUpdate({
+        user: user
+    }, update, fn);
+};
+
+User.UpdateById = function(id, update, fn) {
+    db.user.update({
+        id: id
+    }, update, fn);
+}
+
+User.loginByUser = function(user, fn) {
+    this.findOneAndUpdateByUser(user.user, {online: true}, function(err, one) {
         if (err) fn(new Error('用户不存在!'));
         bcrypt.hash(user.PWD, one.salt, function(err, hash) {
             if (err) fn(err);
@@ -55,5 +67,23 @@ User.prototype.loginByUser = function(user, fn) {
         })
     });
 };
+
+User.logoutById = function(id, fn) {
+    this.UpdateById(id, {online: false}, function(err) {
+        if (err) fn(new Error('写入数据库失败!'));
+        fn();
+    });
+};
+
+User.authenticate = function(name, pass, fn){
+    User.findUserByUser(name, function(err, user){
+        if (err) return fn(err);
+        if (!user.id) return fn();
+        if (user.PWD == pass) return fn(null, user._doc);
+        fn();
+    });
+};
+
+
 
 module.exports = User;

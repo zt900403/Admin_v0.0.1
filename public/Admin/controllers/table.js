@@ -2,8 +2,7 @@
  * Created by Lenovo on 2016/8/26.
  */
 
-
-angular.module('AdminApp').controller('TableCtrl', ['$scope', function ($scope) {
+angular.module('AdminApp').controller('TableCtrl', function ($rootScope,$scope) {
 
     $scope.gridOptions = {
         enableFiltering : true,
@@ -1082,4 +1081,4 @@ angular.module('AdminApp').controller('TableCtrl', ['$scope', function ($scope) 
 
 
     }
-}]);
+});

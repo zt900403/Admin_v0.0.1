@@ -47,6 +47,10 @@ var userSchema = new Schema({
         type: Boolean,
         default: false
     },
+    group: [{
+        type: String,
+        default: 'default'
+    }],
     role: {
         type: String,
         default: 'normal'

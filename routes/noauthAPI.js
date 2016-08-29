@@ -10,11 +10,22 @@ var router = express.Router();
 router.get('/validate', function(req, res, next) {
     var userid = req.session.uid;
     if (userid) {
-        res.format({
-            json: function() {
-                res.json({authed: true});
-            }
+
+        User.findUserById(userid, function(err, one) {
+            if (err)
+                return  res.format({
+                                json: function() {
+                                res.status(401).json(null);
+                            }
+            });
+
+            res.format({
+                json: function() {
+                    res.json(one);
+                }
+            });
         });
+
     } else {
         res.format({
             json: function() {
@@ -51,9 +62,9 @@ router.post('/signin', function(req, res, next) {
         });
     }
 
-    var userModel = new User(user);
 
-    userModel.findUserByUser(user.user, function(err, one) {
+
+    User.findUserByUser(user.user, function(err, one) {
         if (err) {
             res.format({
                 json: function() {
@@ -69,6 +80,7 @@ router.post('/signin', function(req, res, next) {
                 }
             });
         } else {
+            var userModel = new User(user);
             userModel.save(function(err){
                 if (err) {
                     res.format({
@@ -101,9 +113,7 @@ router.post('/login', function(req, res, next) {
         });
     }
 
-    var userModel = new User();
-
-    userModel.loginByUser(user, function(err, one) {
+    User.loginByUser(user, function(err, one) {
         if (err) {
             res.format({
                 json: function() {
@@ -120,6 +130,7 @@ router.post('/login', function(req, res, next) {
         });
     });
 });
+
 
 
 

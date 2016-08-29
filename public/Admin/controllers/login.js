@@ -2,6 +2,11 @@
  * Created by Lenovo on 2016/8/26.
  */
 angular.module('AdminApp').controller('LoginCtrl', function ($rootScope, $scope, $http, $location ) {
+
+    if ($rootScope.me) {                //already login
+        $location.path('/');
+    }
+
     $scope.error = function (msg) {
         $('#messagebox').removeClass('hide');
         $scope.messagebox = {};
