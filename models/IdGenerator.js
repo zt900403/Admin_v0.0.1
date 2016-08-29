@@ -3,8 +3,8 @@
  */
 var mongoose = require('mongoose'),
     Schema = mongoose.Schema;
-
-mongoose.createConnection('mongodb://zt900403:zhangtao43@localhost/AdminApp');
+var config = require('../env.json');
+mongoose.createConnection(config.MongoDB_URI);
 
 var IdGenerator = new Schema({
     modelname  : { type: String },

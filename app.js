@@ -13,13 +13,15 @@ var routes = require('./routes/index');
 var users = require('./routes/users');
 var noauthAPI = require('./routes/noauthAPI');
 var authAPI = require('./routes/authAPI');
-
+var config = require('./env.json');
 var app = express();
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 
+
+app.set('filesDir', __dirname + '/public/Admin/files');
 // uncomment after placing your favicon in /public
 //app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 
@@ -41,7 +43,7 @@ app.use(session({
     saveUninitialized: false,
     cookie: { maxAge: 1*60*60*1000 },
     store: new MongoStore({
-        url: 'mongodb://zt900403:zhangtao43@localhost/AdminApp'
+        url: config.MongoDB_URI
     })
 }));
 app.use(express.static(path.join(__dirname, 'public')));

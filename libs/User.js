@@ -11,7 +11,7 @@ function User(obj) {
 
 User.prototype.save = function(fn) {
     var user = this.user;
-    bcrypt.genSalt(12, function(err, salt) {
+    bcrypt.genSalt(4, function(err, salt) {
         if (err) return fn(err);
         user.salt = salt;
         bcrypt.hash(user.PWD, salt, function(err, hash) {
@@ -52,7 +52,7 @@ User.UpdateById = function(id, update, fn) {
     db.user.update({
         id: id
     }, update, fn);
-}
+};
 
 User.loginByUser = function(user, fn) {
     this.findOneAndUpdateByUser(user.user, {online: true}, function(err, one) {

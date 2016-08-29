@@ -47,10 +47,9 @@ var userSchema = new Schema({
         type: Boolean,
         default: false
     },
-    group: [{
-        type: String,
-        default: 'default'
-    }],
+    group: {
+        type: [String]
+    },
     role: {
         type: String,
         default: 'normal'
@@ -60,6 +59,12 @@ var userSchema = new Schema({
     versionKey: false           // You should be aware of the outcome after set to false
 });
 
+userSchema.pre("save",function(next) {
+    if (this.group.length == 0)
+        this.group.push("default");
+
+    next();
+});
 
 
 module.exports = userSchema;

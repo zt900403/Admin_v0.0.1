@@ -4,6 +4,10 @@
 var express = require('express');
 var User = require('../libs/User');
 var basicAuth = require('basic-auth');
+var multiparty = require('multiparty');
+var path = require('path');
+var join = path.join;
+var fs = require('fs');
 
 var router = express.Router();
 
@@ -22,8 +26,47 @@ router.post('/logout', function(req, res, next) {
 });
 
 router.post('/uploadFile', function(req, res, next) {
-    var name = req.files.name;
-    var file = req.files.body;
+    var form = new multiparty.Form();
+    form.parse(req, function(err, fields, files) {
+        var name;
+        if (fields.name.length === 0 || fields.name[0] == 'undefined') {
+            name = null;
+        } else {
+            var name = fields.name[0];
+        }
+
+        var len = files.file.length;
+        for ( var i = 0; i < len; ++i ) {
+            var ext;
+            if (name) {
+                var matched = name.toString().match(/\.(\w*)/);
+                if ( matched ) {
+                    ext = matched[0];
+                }
+
+                if (typeof(ext) == 'undefined') {
+
+                    if ( matched = files.file[i].originalFilename.match(/\.(\w*)/) )
+                        ext = matched[0];
+                    else
+                        ext = '';
+                }
+            }
+
+
+            var name = name ? (name + (i ? i : '')) + ext : files.file[i].originalFilename;
+
+
+            var path = join(req.app.get('filesDir'), name);
+
+            fs.rename(files.file[i].path, path, function(err) {
+                if (err) return next(err);
+
+            });
+
+        }
+    });
+
 });
 
 router.basicAuth = function(req, res, next) {

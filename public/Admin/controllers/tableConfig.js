@@ -1,11 +1,28 @@
 /**
  * Created by Lenovo on 2016/8/29.
  */
+
 angular.module('AdminApp').controller('TableConfigCtrl', function ($rootScope, $scope, $http, Base64) {
+
+    $scope.error = function (msg) {
+        $('#messagebox').removeClass('hide');
+        $scope.messagebox = {};
+        $scope.messagebox.message = msg;
+        $scope.messagebox.style = 'alert-danger';
+    };
+
+    $scope.message = function (msg) {
+        $('#messagebox').removeClass('hide');
+        $scope.messagebox = {};
+        $scope.messagebox.message = msg;
+        $scope.messagebox.style = 'alert-success';
+    };
+
     $scope.submit = function() {
+        $scope.message('haha', $scope);
             var fd = new FormData();
-            fd.append('file[name]', $scope.file.name);
-            fd.append('file[body]', $scope.file.body);
+            fd.append('name', $scope.name);
+            fd.append('file', $scope.myFiles);
 
             $http.post('/Admin/api/auth/uploadFile', fd, {
                 transformRequest: angular.identity,

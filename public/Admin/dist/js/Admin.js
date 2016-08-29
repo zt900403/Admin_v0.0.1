@@ -158,7 +158,7 @@ var app = angular.module('AdminApp', ['ngRoute', 'ui.grid','ui.grid.resizeColumn
     $rootScope.$on( "$routeChangeStart", function(event, next, current) {
         if ( $rootScope.me == null ) {
             // no logged user, we should be going to #login
-            if ( next.templateUrl == "/Admin/pages/login.html" ) {
+            if ( next.templateUrl == "/Admin/pages/login.html" || next.templateUrl == "/Admin/pages/register.html") {
                 // already going to #login, no redirect needed
             } else {
                 // not going to #login, we should redirect now
@@ -177,3 +177,20 @@ var app = angular.module('AdminApp', ['ngRoute', 'ui.grid','ui.grid.resizeColumn
         $location.path('/login');
     });
 });
+
+
+app.directive('fileModel', ['$parse', function ($parse) {
+    return {
+        restrict: 'A',
+        link: function(scope, element, attrs) {
+            var model = $parse(attrs.fileModel);
+            var modelSetter = model.assign;
+
+            element.bind('change', function(){
+                scope.$apply(function(){
+                    modelSetter(scope, element[0].files[0]);
+                });
+            });
+        }
+    };
+}]);
