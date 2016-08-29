@@ -1,0 +1,47 @@
+<div id="page-wrapper">
+    <div class="row">
+        <div class="col-lg-12">
+            <h2 class="page-header">报表设置<a class="btn btn-default pull-right" href="#/"><i class="fa fa-arrow-left "></i>返回</a></h2>
+        </div>
+        <!-- /.col-lg-12 -->
+    </div>
+    <!-- /.row -->
+    <div class="row" >
+        <div class="col-lg-12">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    上传Excel
+                </div>
+                <div class="panel-body">
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <form role="form" ng-controller="TableConfigCtrl" ng-submit="submit()">
+                                <div class="form-group">
+                                    <label>另存为</label>
+                                    <input type="text" class="form-control" ng-model="file.name" placeholder="文件名">
+                                    <p class="help-block">将文件在服务器另存为该文件名.</p>
+                                </div>
+
+
+                                <div class="form-group">
+                                    <label>文件</label>
+                                    <input type="file" ng-model="file.body">
+                                </div>
+                                <button type="submit" class="btn btn-default">提交</button>
+                                <button type="reset" class="btn btn-default">重置</button>
+                            </form>
+                        </div>
+                        <!-- /.col-lg-6 (nested) -->
+                        <!-- /.col-lg-6 (nested) -->
+                    </div>
+                    <!-- /.row (nested) -->
+                </div>
+                <!-- /.panel-body -->
+            </div>
+            <!-- /.panel -->
+        </div>
+        <!-- /.col-lg-12 -->
+    </div>
+    <!-- /.row -->
+</div>
+<!-- /#page-wrapper -->

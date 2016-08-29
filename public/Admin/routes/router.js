@@ -13,6 +13,10 @@ angular.module('AdminApp').config(function($routeProvider) {
         templateUrl: '/Admin/pages/register.html',
         controller: 'RegisterCtrl'
     }).
+    when('/tableConfig', {
+        templateUrl: '/Admin/pages/tableConfig.html',
+        controller: 'TableConfigCtrl'
+    }).
     otherwise({
         redirectTo: '/login'
     });

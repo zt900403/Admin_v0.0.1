@@ -10,12 +10,20 @@ var router = express.Router();
 router.post('/logout', function(req, res, next) {
 
     if (req.session.uid) {
-        req.session.destroy(function(err) {
+        User.logoutById(req.session.uid, function(err) {
             if (err) throw err;
-            res.json(200);
+            req.session.destroy(function(err) {
+                if (err) throw err;
+                res.json(200);
+            });
         });
     }
 
+});
+
+router.post('/uploadFile', function(req, res, next) {
+    var name = req.files.name;
+    var file = req.files.body;
 });
 
 router.basicAuth = function(req, res, next) {

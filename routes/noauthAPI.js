@@ -113,8 +113,6 @@ router.post('/login', function(req, res, next) {
         });
     }
 
-
-
     User.loginByUser(user, function(err, one) {
         if (err) {
             res.format({

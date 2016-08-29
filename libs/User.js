@@ -42,8 +42,20 @@ User.findUserByUser = function(user, fn) {
     }, fn);
 };
 
+User.findOneAndUpdateByUser = function(user, update, fn) {
+    db.user.findOneAndUpdate({
+        user: user
+    }, update, fn);
+};
+
+User.UpdateById = function(id, update, fn) {
+    db.user.update({
+        id: id
+    }, update, fn);
+}
+
 User.loginByUser = function(user, fn) {
-    this.findUserByUser(user.user, function(err, one) {
+    this.findOneAndUpdateByUser(user.user, {online: true}, function(err, one) {
         if (err) fn(new Error('用户不存在!'));
         bcrypt.hash(user.PWD, one.salt, function(err, hash) {
             if (err) fn(err);
@@ -53,6 +65,13 @@ User.loginByUser = function(user, fn) {
                 fn(new Error('密码错误!'));
             }
         })
+    });
+};
+
+User.logoutById = function(id, fn) {
+    this.UpdateById(id, {online: false}, function(err) {
+        if (err) fn(new Error('写入数据库失败!'));
+        fn();
     });
 };
 
