@@ -1,22 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="059a49ae-19f9-434a-a2fc-c791d1810c26" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/models/user.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/public/Admin/controllers/register.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/public/Admin/pages/elements/messagebox.html" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/routes/authAPI.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/routes/noauthAPI.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/在线报表设计文档.docx" afterPath="$PROJECT_DIR$/在线报表设计文档.docx" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app.js" afterPath="$PROJECT_DIR$/app.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/Admin/controllers/login.js" afterPath="$PROJECT_DIR$/public/Admin/controllers/login.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/Admin/dist/js/Admin.js" afterPath="$PROJECT_DIR$/public/Admin/dist/js/Admin.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/Admin/index.html" afterPath="$PROJECT_DIR$/public/Admin/index.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/Admin/pages/elements/navbar.html" afterPath="$PROJECT_DIR$/public/Admin/pages/elements/navbar.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/Admin/pages/login.html" afterPath="$PROJECT_DIR$/public/Admin/pages/login.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/Admin/pages/register.html" afterPath="$PROJECT_DIR$/public/Admin/pages/register.html" />
-    </list>
+    <list default="true" id="059a49ae-19f9-434a-a2fc-c791d1810c26" name="Default" comment="" />
     <ignored path="Admin_v0.0.1.iws" />
     <ignored path=".idea/workspace.xml" />
     <ignored path="$PROJECT_DIR$/.tmp/" />
@@ -571,15 +556,15 @@
       <updated>1472095023454</updated>
       <workItem from="1472095028411" duration="10177000" />
       <workItem from="1472130214814" duration="2271000" />
-      <workItem from="1472170406311" duration="23853000" />
+      <workItem from="1472170406311" duration="24038000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="36301000" />
+    <option name="totallyTimeSpent" value="36486000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="-4" y="-4" width="1308" height="776" extended-state="7" />
+    <frame x="-4" y="-4" width="1308" height="776" extended-state="6" />
     <editor active="true" />
     <layout>
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.21" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
@@ -587,7 +572,7 @@
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32911393" sideWeight="0.5031447" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="npm" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.2632353" sideWeight="0.49685535" order="2" side_tool="false" content_ui="tabs" x="18" y="286" width="1272" height="208" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.2632353" sideWeight="0.49685535" order="2" side_tool="false" content_ui="tabs" x="18" y="286" width="1272" height="208" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
