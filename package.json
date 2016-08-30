@@ -18,6 +18,7 @@
     "mongoose": "^4.5.10",
     "morgan": "~1.7.0",
     "multiparty": "^4.1.2",
-    "serve-favicon": "~2.3.0"
+    "serve-favicon": "~2.3.0",
+    "xlsx": "^0.8.0"
   }
 }

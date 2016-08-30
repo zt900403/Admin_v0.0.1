@@ -19,7 +19,6 @@ angular.module('AdminApp').controller('TableConfigCtrl', function ($rootScope, $
     };
 
     $scope.submit = function() {
-        $scope.message('haha', $scope);
             var fd = new FormData();
             fd.append('name', $scope.name);
             fd.append('file', $scope.myFiles);

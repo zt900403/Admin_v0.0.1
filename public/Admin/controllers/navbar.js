@@ -5,4 +5,5 @@ angular.module('AdminApp').controller('NavbarCtrl', function ($rootScope, $scope
     $scope.initMetisMenu = function() {
         $('#side-menu').metisMenu();
     };
+
 });

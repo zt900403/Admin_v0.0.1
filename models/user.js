@@ -63,6 +63,8 @@ userSchema.pre("save",function(next) {
     if (this.group.length == 0)
         this.group.push("default");
 
+    this.LLTime = Date.now();
+
     next();
 });
 

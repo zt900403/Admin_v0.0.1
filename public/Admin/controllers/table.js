@@ -11,6 +11,7 @@ angular.module('AdminApp').controller('TableCtrl', function ($rootScope,$scope) 
         //showGridFooter: true,
         exporterMenuCsv: true,
 
+        enableCellSelection: true,
         minRowsToShow : 15,
         paginationPageSizes: [15, 25, 50, 75],
         paginationPageSize: 15
@@ -27,8 +28,10 @@ angular.module('AdminApp').controller('TableCtrl', function ($rootScope,$scope) 
 
     $scope.gridOptions.columnDefs = [
         {
-            name: '编号',
-            width: 100
+            field: '编号',
+            displayName: 'haha',
+            enableCellEdit: false,
+            width: '*',
         },
         {
             name: '所属类别',
@@ -36,7 +39,7 @@ angular.module('AdminApp').controller('TableCtrl', function ($rootScope,$scope) 
         },
         {
             name: '名称',
-            width: 100
+            width: 120
         },
         {
             name: '所属系统',
@@ -103,19 +106,19 @@ angular.module('AdminApp').controller('TableCtrl', function ($rootScope,$scope) 
             width: 100
         },
         {
-            name: '基本配置',
-            width: 100
+            name: '基本配置hhhhhhhhh',
+
         },
         {
             name: '用途',
             width: 100
         }
 
-    ]
+    ];
 
     var yizhuang = [
         {
-            "编号": "1",
+            "编号": "11111111111111111111111111111111",
             "所属类别": "数据库",
             "名称": "CNTBC数据库",
             "所属系统": "开发库",
@@ -161,7 +164,7 @@ angular.module('AdminApp').controller('TableCtrl', function ($rootScope,$scope) 
             "用途":""
         },
         {
-            "编号": "3",
+            "编号": "3gggggggggggggggggggggg",
             "所属类别": "数据库",
             "名称": "DAP",
             "所属系统": "ODS",

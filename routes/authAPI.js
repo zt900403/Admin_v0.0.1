@@ -8,6 +8,7 @@ var multiparty = require('multiparty');
 var path = require('path');
 var join = path.join;
 var fs = require('fs');
+var XLSX = require('xlsx');
 
 var router = express.Router();
 
@@ -35,43 +36,69 @@ router.post('/uploadFile', function(req, res, next) {
             var name = fields.name[0];
         }
 
-        var len = files.file.length;
-        for ( var i = 0; i < len; ++i ) {
+
+
+        files.file.forEach(function(file) {
             var ext;
             if (name) {
                 var matched = name.toString().match(/\.(\w*)/);
                 if ( matched ) {
                     ext = matched[0];
                 }
-
                 if (typeof(ext) == 'undefined') {
 
-                    if ( matched = files.file[i].originalFilename.match(/\.(\w*)/) )
+                    if ( matched = file.originalFilename.match(/\.(\w*)/) )
                         ext = matched[0];
                     else
                         ext = '';
                 }
             }
 
+            var name = name ? name + ext  : file.originalFilename;
+            name = Date.now() + name;
 
-            var name = name ? (name + (i ? i : '')) + ext : files.file[i].originalFilename;
 
+            var path = join(req.app.get('filesDir') ,　req.session.uid.toString());
+            fs.exists(path,  function(exists) {
+                if (!exists) {
+                    fs.mkdir(path, function(err) {
+                        if (err) return next(err);
+                    });
+                }
 
-            var path = join(req.app.get('filesDir'), name);
-
-            fs.rename(files.file[i].path, path, function(err) {
-                if (err) return next(err);
+                path = join(path, name);
+                fs.rename(file.path, path, function(err) {
+                    if (err) return next(err);
+                    var workbook = XLSX.readFile(path);
+                    var sheet_name_list = workbook.SheetNames;
+                    sheet_name_list.forEach(function(y) { /* iterate through sheets */
+                        var worksheet = workbook.Sheets[y];
+                        var sheetData = [];
+                        var sheetColDefs = [];
+                        for (z in worksheet) {
+                            /* all keys that do not begin with "!" correspond to cell addresses */
+                            if(z[0] === '!') continue;
+                            var matched = z.match(/^([a-zA-Z]*)(\d*)$/);
+                            if (matched) {
+                                sheetColDefs.push({filed: matched[1], width: 50});
+                            }
+                            console.log(y + "!" + z + "=" + JSON.stringify(worksheet[z].v));
+                        }
+                    });
+                });
 
             });
 
-        }
+        });
+
+
     });
 
 });
 
 router.basicAuth = function(req, res, next) {
       var user = basicAuth(req);
-      if (!user || !user.name || !user.pass) {
+      if (!user || !user.name || !user.pass || !req.session.uid) {
           res.set('WWW-Authenticate', 'Basic realm=Authorization Required');
           return res.send(401);
       }
