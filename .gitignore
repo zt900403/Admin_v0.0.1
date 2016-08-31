@@ -30,6 +30,7 @@ node_modules
 npm-debug.log
 
 # user customized
+.idea
 node_modules
 var
 public/Admin/bower_components
