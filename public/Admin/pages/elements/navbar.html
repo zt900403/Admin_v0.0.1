@@ -32,7 +32,7 @@
                 </li>
                 -->
                 <li class="divider"></li>
-                <li><a ng-click="$root.logout()"><i class="fa fa-sign-out fa-fw"></i>登出</a>
+                <li><a ng-click="logout()"><i class="fa fa-sign-out fa-fw"></i>登出</a>
                 </li>
             </ul>
             <!-- /.dropdown-user -->
@@ -60,10 +60,10 @@
                      <a href="index.html"><i class="fa fa-dashboard fa-fw"></i> Dashboard</a>
                  </li> -->
                 <li>
-                    <a href="/Admin/#/"><i class="fa fa-table fa-fw"></i> 报表<span class="fa arrow"></span></a>
+                    <a href="/Admin/#/" ng-click="getFilenames()"><i class="fa fa-table fa-fw" ></i> 报表<span class="fa arrow"></span></a>
                     <ul class="nav nav-second-level pre-scrollable" style="max-height:550px;">
                             <li>
-                                <a href="#/tableConfig">报表设置</a>
+                                <a href="#/">报表设置</a>
                             </li>
                             <li>
                                 <a href="#/tableConfig">报表设置</a>

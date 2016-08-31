@@ -129,26 +129,7 @@ var app = angular.module('AdminApp', ['ngRoute', 'ui.grid','ui.grid.resizeColumn
     }])
     .run(function ($window, $rootScope, $http, $location, Base64) {
 
-    $rootScope.logout = function() {
-        if ($rootScope.me) {
 
-            $http({
-                url: '/Admin/api/auth/logout',
-                method: 'POST',
-                headers: {
-                    Authorization: 'Basic '
-                    + Base64.encode($rootScope.me.user + ':' + $rootScope.me.PWD)
-                }
-            }).success(function() {
-                delete $rootScope.me;
-                $location.path('/login');
-            }).error(function(err) {
-                alert(err);
-            });
-        } else {
-            $location.path('/login');
-        }
-    };
 
 
     $rootScope.initMetisMenu = function() {

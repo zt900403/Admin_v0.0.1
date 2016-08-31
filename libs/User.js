@@ -56,13 +56,14 @@ User.UpdateById = function(id, update, fn) {
 
 User.loginByUser = function(user, fn) {
     this.findOneAndUpdateByUser(user.user, {online: true}, function(err, one) {
-        if (err) fn(new Error('用户不存在!'));
+        if (err) return fn(new Error('读数据库异常!'));
+        if (!one) return fn(new Error('用户名不存在!'));
         bcrypt.hash(user.PWD, one.salt, function(err, hash) {
             if (err) fn(err);
             if (hash == one.PWD) {
-                fn(null, one._doc);
+                return fn(null, one);
             } else {
-                fn(new Error('密码错误!'));
+                return fn(new Error('密码错误!'));
             }
         })
     });
@@ -79,7 +80,7 @@ User.authenticate = function(name, pass, fn){
     User.findUserByUser(name, function(err, user){
         if (err) return fn(err);
         if (!user.id) return fn();
-        if (user.PWD == pass) return fn(null, user._doc);
+        if (pass == user.PWD) return fn(null, user._doc);
         fn();
     });
 };

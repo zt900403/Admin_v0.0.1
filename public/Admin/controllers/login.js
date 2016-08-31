@@ -32,7 +32,7 @@ angular.module('AdminApp').controller('LoginCtrl', function ($rootScope, $scope,
             $rootScope.me = user;
             $location.path('/');
         }).error(function(err) {
-            $scope.error(err);
+            $scope.error(err.err);
         });
     };
 });

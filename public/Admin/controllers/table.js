@@ -4,6 +4,7 @@
 
 angular.module('AdminApp').controller('TableCtrl', function ($rootScope,$scope) {
 
+
     $scope.gridOptions = {
         enableFiltering : true,
         enableGridMenu: true,

@@ -10,6 +10,7 @@ var sheetColDefsSchema = new Schema({
         type: String,
         required: true
     },
+    displayName: String,
     width: {
         type: Number,
         required: true
@@ -26,14 +27,6 @@ var sheetSchema = new Schema({
     },
     lastHeader: {
         type: String,
-        required: true
-    },
-    rowsNum: {
-        type: Number,
-        required: true
-    },
-    colsNum: {
-        type: Number,
         required: true
     },
     columnDefs : [sheetColDefsSchema],
@@ -64,6 +57,11 @@ var commentSchema = new Schema({
 });
 
 var fileSchema = new Schema({
+    name: {
+        type: String,
+        required: true,
+        unique: true
+    },
     owner: {
         type: String,
         required: true
@@ -91,7 +89,11 @@ var fileSchema = new Schema({
         GroupM: []
     },
     Sheets : [sheetSchema],
-    comments:[commentSchema]
+    comments:[commentSchema],
+    locked: {
+        type: Boolean,
+        default: false
+    }
 },{
     versionKey: false           // You should be aware of the outcome after set to false
 });
