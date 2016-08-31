@@ -25,7 +25,7 @@
                 <i class="fa fa-caret-down"></i>
             </a>
             <ul class="dropdown-menu dropdown-user" >
-                <li><a href="#"><i class="fa fa-user fa-fw" ></i>用户设置</a>
+                <li><a href="#/"><i class="fa fa-user fa-fw" ></i>用户设置</a>
                 </li>
                 <!--
                 <li><a href="#"><i class="fa fa-gear fa-fw"></i> Settings</a>
@@ -60,127 +60,10 @@
                      <a href="index.html"><i class="fa fa-dashboard fa-fw"></i> Dashboard</a>
                  </li> -->
                 <li>
-                    <a href="/Admin/#/" ng-click="getFilenames()"><i class="fa fa-table fa-fw" ></i> 报表<span class="fa arrow"></span></a>
+                    <a id="navTable" href="/Admin/#/" ng-init="siderNavBarInit()"><i class="fa fa-table fa-fw" ></i> 报表<span class="fa arrow"></span></a>
                     <ul class="nav nav-second-level pre-scrollable" style="max-height:550px;">
                             <li>
-                                <a href="#/">报表设置</a>
-                            </li>
-                            <li>
-                                <a href="#/tableConfig">报表设置</a>
-                            </li>
-                            <li>
-                                <a href="#/tableConfig">报表设置</a>
-                            </li>
-                            <li>
-                                <a href="#/tableConfig">报表设置</a>
-                            </li>
-                            <li>
-                                <a href="#/tableConfig">报表设置</a>
-                            </li>
-                            <li>
-                                <a href="#/tableConfig">报表设置</a>
-                            </li>
-                            <li>
-                                <a href="#/tableConfig">报表设置</a>
-                            </li>
-                            <li>
-                                <a href="#/tableConfig">报表设置</a>
-                            </li>
-                            <li>
-                                <a href="#/tableConfig">报表设置</a>
-                            </li>
-                            <li>
-                                <a href="#/tableConfig">报表设置</a>
-                            </li>
-                            <li>
-                                <a href="#/tableConfig">报表设置</a>
-                            </li>
-                            <li>
-                                <a href="#/tableConfig">报表设置</a>
-                            </li>
-                            <li>
-                                <a href="#/tableConfig">报表设置</a>
-                            </li>
-                            <li>
-                                <a href="#/tableConfig">报表设置</a>
-                            </li>
-                            <li>
-                                <a href="#/tableConfig">报表设置</a>
-                            </li>
-                            <li>
-                                <a href="#/tableConfig">报表设置</a>
-                            </li>
-                            <li>
-                                <a href="#/tableConfig">报表设置</a>
-                            </li>
-                            <li>
-                                <a href="#/tableConfig">报表设置</a>
-                            </li>
-                            <li>
-                                <a href="#/tableConfig">报表设置</a>
-                            </li>
-                            <li>
-                                <a href="#/tableConfig">报表设置</a>
-                            </li>
-                            <li>
-                                <a href="#/tableConfig">报表设置</a>
-                            </li>
-                            <li>
-                                <a href="#/tableConfig">报表设置</a>
-                            </li>
-                            <li>
-                                <a href="#/tableConfig">报表设置</a>
-                            </li>
-                            <li>
-                                <a href="#/tableConfig">报表设置</a>
-                            </li>
-                            <li>
-                                <a href="#/tableConfig">报表设置</a>
-                            </li>
-                            <li>
-                                <a href="#/tableConfig">报表设置</a>
-                            </li>
-                            <li>
-                                <a href="#/tableConfig">报表设置</a>
-                            </li>
-                            <li>
-                                <a href="#/tableConfig">报表设置</a>
-                            </li>
-                            <li>
-                                <a href="#/tableConfig">报表设置</a>
-                            </li>
-                            <li>
-                                <a href="#/tableConfig">报表设置</a>
-                            </li>
-                            <li>
-                                <a href="#/tableConfig">报表设置</a>
-                            </li>
-                            <li>
-                                <a href="#/tableConfig">报表设置</a>
-                            </li>
-                            <li>
-                                <a href="#/tableConfig">报表设置</a>
-                            </li>
-                            <li>
-                                <a href="#/tableConfig">报表设置</a>
-                            </li>
-                            <li>
-                                <a href="#/tableConfig">报表设置</a>
-                            </li>
-                            <li>
-                                <a href="#/tableConfig">报表设置</a>
-                            </li>
-                            <li>
-                                <a href="#/tableConfig">报表设置</a>
-                            </li>
-                            <li>
-                                <a href="#/tableConfig">报表设置</a>
-                            </li>
-                            <li>
-                                <a href="#/tableConfig">报表设置</a>
-                            </li>
-                            <li>
-                                <a href="#/tableConfig">报表设置</a>
+                                <a href="#/" ng-repeat="name in filenames" ng-click="loadFile(name)">{{name}}</a>
                             </li>
                     </ul>
                 </li>

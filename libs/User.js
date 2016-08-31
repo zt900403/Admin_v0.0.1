@@ -79,10 +79,11 @@ User.logoutById = function(id, fn) {
 User.authenticate = function(name, pass, fn){
     User.findUserByUser(name, function(err, user){
         if (err) return fn(err);
-        if (!user.id) return fn();
+        if (!user) return fn(new Error('not found the user!'));
         if (pass == user.PWD) return fn(null, user._doc);
-        fn();
-    });
+        fn(new Error('wrong password!'));
+        });
+
 };
 
 

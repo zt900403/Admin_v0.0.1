@@ -29,7 +29,7 @@ router.post('/uploadFile', function(req, res, next) {
     form.parse(req, function(err, fields, files) {
         var filename = fields.name[0];
         File.filenameValidate(filename, function(err, exists) {
-            if (err) return res.status(500).json({err : '数据库读取异常1'});
+            if (err) return res.status(500).json({err : '数据库读取异常!'});
             if (exists) return res.status(400).json({err: '表名字已存在! 请更换一个!'});
             File.parseExcelAndSave(req, filename, files.file[0],req.user, function(err) {
                 if (err) return res.status(500).json({err: '文件解析或入库错误!'});
@@ -45,6 +45,13 @@ router.get('/validFilenames', function(req, res, next) {
     File.validFilenames(req.user, function(err, filenames) {
         if (err) return res.status(500).json({err: err.message});
         res.json(filenames);
+    });
+});
+
+router.get('/fileByName', function(req, res, next) {
+    File.findFileByName(req.query.filename, function(err, file) {
+        if (err) return res.status(500).json({err: '读取数据库异常!'});
+        res.json(file);
     });
 });
 

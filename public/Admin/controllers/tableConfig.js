@@ -32,6 +32,7 @@ angular.module('AdminApp').controller('TableConfigCtrl', function ($rootScope, $
                 }
             }).success(function(result){
                 $scope.message(result.result);
+                $rootScope.$broadcast('updateFilenames', null);
             }).error(function(result) {
                 $scope.error(result.err);
             });

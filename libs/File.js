@@ -63,13 +63,13 @@ File.parseExcelAndSave = function(_req, _name, _file, _user, fn) {
     fs.exists(path,  function(exists) {
         if (!exists) {
             fs.mkdir(path, function(err) {
-                if (err) return next(err);
+                if (err) return fn(err);
             });
         }
 
         path = join(path, filename);
         fs.rename(_file.path, path, function(err) {
-            if (err) return next(err);
+            if (err) return fn(err);
             var workbook = XLSX.readFile(path);
 
             var fileObj = {};
@@ -89,7 +89,8 @@ File.parseExcelAndSave = function(_req, _name, _file, _user, fn) {
                 sheetColDefs[0] = {
                     field: 'index',
                     displayName: '',
-                    width: 50
+                    enableCellEdit: false,
+                    width: 40
                 };
                 var maxWidthdict = {};
                 var lastHeader = '';
@@ -120,13 +121,15 @@ File.parseExcelAndSave = function(_req, _name, _file, _user, fn) {
                     }
                 }
                 for(var i = 0, len = sheetData.length; i < len; ++i) {
+                    if (!sheetData[i])
+                        sheetData[i] = {};
                     sheetData[i].index = i + 1;
                 }
 
                 var tmp = 'A';
                 while ( File.StringCompareTo(tmp, lastHeader) != 1 ) {
                     sheetColDefs.push({field: tmp,
-                        width: maxWidthdict[tmp] ? maxWidthdict[tmp] * 15 : 15});
+                        width: maxWidthdict[tmp] ? maxWidthdict[tmp] * 20 : 20});
                     var len = tmp.length;
                     if (tmp == 'Z'.repeat(len)) {
                         tmp = 'A'.repeat(len+1);

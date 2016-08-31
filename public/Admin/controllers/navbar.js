@@ -1,9 +1,14 @@
 /**
  * Created by Lenovo on 2016/8/29.
  */
-angular.module('AdminApp').controller('NavbarCtrl', function ($rootScope, $scope, $http, $location, Base64 ) {
+angular.module('AdminApp').controller('NavbarCtrl', function ($rootScope, $scope, $http, $location, Base64, $timeout ) {
     $scope.initMetisMenu = function() {
         $('#side-menu').metisMenu();
+    };
+
+    $scope.siderNavBarInit = function() {
+        if ($rootScope.me)
+            $scope.updateFilenames();
     };
 
     $scope.logout = function() {
@@ -27,11 +32,7 @@ angular.module('AdminApp').controller('NavbarCtrl', function ($rootScope, $scope
         }
     };
 
-    $scope.$on('updateFilenames', function(event, args) {
-
-    });
-
-    $scope.getFilenames = function() {
+    $scope.updateFilenames = function() {
         $http({
             url: '/Admin/api/auth/validFilenames',
             method: 'GET',
@@ -45,6 +46,14 @@ angular.module('AdminApp').controller('NavbarCtrl', function ($rootScope, $scope
             alert(err.err);
         });
     };
+
+    $scope.loadFile = function(filename) {
+        $rootScope.$broadcast('loadFile', filename);
+    };
+
+    $scope.$on('updateFilenames', function(event, args) {
+        $scope.updateFilenames();
+    });
 
 
 });

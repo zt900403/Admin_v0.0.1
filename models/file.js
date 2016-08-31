@@ -11,6 +11,7 @@ var sheetColDefsSchema = new Schema({
         required: true
     },
     displayName: String,
+    enableCellEdit: Boolean,
     width: {
         type: Number,
         required: true
@@ -42,7 +43,7 @@ var commentSchema = new Schema({
     },
     CTime: {
         type: Date,
-        default: Date.now()
+        default: Date.now
     },
     user: {
         type: String,
@@ -68,11 +69,11 @@ var fileSchema = new Schema({
     },
     CTime: {
         type: Date,
-        default: Date.now()
+        default: Date.now
     },
     MTime: {
         type: Date,
-        default: Date.now()
+        default: Date.now
     },
     MUser: {
         type: String,
@@ -93,6 +94,10 @@ var fileSchema = new Schema({
     locked: {
         type: Boolean,
         default: false
+    },
+    status: {
+        type: String,
+        default: 'active'           //active    discard
     }
 },{
     versionKey: false           // You should be aware of the outcome after set to false

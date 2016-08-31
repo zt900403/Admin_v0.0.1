@@ -137,13 +137,13 @@ var app = angular.module('AdminApp', ['ngRoute', 'ui.grid','ui.grid.resizeColumn
     };
 
     $rootScope.$on( "$routeChangeStart", function(event, next, current) {
-        if ( $rootScope.me == null ) {
+        if ($rootScope.me == null) {
             // no logged user, we should be going to #login
             if ( next.templateUrl == "/Admin/pages/login.html" || next.templateUrl == "/Admin/pages/register.html") {
-                // already going to #login, no redirect needed
+                return ;// already going to #login, no redirect needed
             } else {
                 // not going to #login, we should redirect now
-                $location.path( "/login" );
+                return $location.path( "/login" );
             }
         }
     });
@@ -157,6 +157,7 @@ var app = angular.module('AdminApp', ['ngRoute', 'ui.grid','ui.grid.resizeColumn
     }).error(function (data) {
         $location.path('/login');
     });
+
 });
 
 

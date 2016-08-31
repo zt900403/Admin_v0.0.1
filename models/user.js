@@ -30,7 +30,7 @@ var userSchema = new Schema({
     },
     CTime: {                    //create time
         type: Date,
-        default: Date.now()
+        default: Date.now
     },
     LLTime: Date,               //Last login time
     files: [String],			//the files of you create
@@ -52,8 +52,8 @@ var userSchema = new Schema({
     },
     role: {
         type: String,
-        default: 'normal'
-    }                //admin,normal,inactive
+        default: 'normal'            //admin,normal,inactive
+    }
 
 },{
     versionKey: false           // You should be aware of the outcome after set to false
