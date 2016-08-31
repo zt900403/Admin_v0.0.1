@@ -39,7 +39,7 @@ router.post('/signin', function(req, res, next) {
     var user = req.body.user;
 
     if (!user || !user.user || !user.PWD || !user.PWD2 ) {
-        res.format({
+        return res.format({
             json: function() {
                 res.status(401).json({err: 'incomplete input data'});
             }
@@ -47,7 +47,7 @@ router.post('/signin', function(req, res, next) {
     }
 
     if ( user.user.length < 4 ) {
-        res.format({
+        return res.format({
             json: function() {
                 res.status(401).json({err: 'user length is not 8'});
             }
@@ -55,7 +55,7 @@ router.post('/signin', function(req, res, next) {
     }
 
     if ( user.PWD != user.PWD ) {
-        res.format({
+        return res.format({
             json: function() {
                 res.status(401).json({err: 'PWD and PWD2 are not match'});
             }
@@ -66,7 +66,7 @@ router.post('/signin', function(req, res, next) {
 
     User.findUserByUser(user.user, function(err, one) {
         if (err) {
-            res.format({
+            return res.format({
                 json: function() {
                     res.status(401).json({err: 'database error'});
                 }
@@ -74,7 +74,7 @@ router.post('/signin', function(req, res, next) {
         }
 
         if (one) {
-            res.format({
+            return res.format({
                 json: function() {
                     res.status(401).json({err: 'User already exists'});
                 }
@@ -83,14 +83,14 @@ router.post('/signin', function(req, res, next) {
             var userModel = new User(user);
             userModel.save(function(err){
                 if (err) {
-                    res.format({
+                    return res.format({
                         json: function() {
                             res.status(401).json({err: 'save to database error'});
                         }
                     });
 
                 } else {
-                    res.format({
+                    return res.format({
                         json: function() {
                             res.json({result:true});
                         }
@@ -106,24 +106,24 @@ router.post('/signin', function(req, res, next) {
 router.post('/login', function(req, res, next) {
     var user = req.body.user;
     if ( !user || !user.user || !user.PWD ) {
-        res.format({
+        return res.format({
             json: function() {
-                res.status(401).json({err: 'incomplete input data'});
+                res.status(401).json({err: '输入数据不完整!'});
             }
         });
     }
 
     User.loginByUser(user, function(err, one) {
         if (err) {
-            res.format({
+            return res.format({
                 json: function() {
-                    res.status(401).json(err);
+                    res.status(401).json({err: err.message});
                 }
             });
         }
 
         req.session.uid = one.id;
-        res.format({
+        return res.format({
             json: function() {
                 res.json(one);
             }

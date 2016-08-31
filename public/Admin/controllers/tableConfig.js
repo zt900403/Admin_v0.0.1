@@ -30,10 +30,10 @@ angular.module('AdminApp').controller('TableConfigCtrl', function ($rootScope, $
                     'Authorization': 'Basic '
                         + Base64.encode($rootScope.me.user + ':' + $rootScope.me.PWD)
                 }
-            }).success(function(){
-
-            }).error(function(){
-
+            }).success(function(result){
+                $scope.message(result.result);
+            }).error(function(result) {
+                $scope.error(result.err);
             });
         }
 });
