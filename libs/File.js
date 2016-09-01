@@ -46,10 +46,28 @@ File.StringCompareTo = function(l, r) {
     }
 };
 
-File.StringNextChar = function(char) {                      //Ascii + 1
+File.nextChar = function(char) {                      //Ascii + 1
     if (char.length ==1)
         return String.fromCharCode(char[0].charCodeAt(0) + 1)
     return null;
+};
+
+File.CharIncrement = function(char) {
+    var len = char.length;
+    if (char == 'Z'.repeat(len)) {
+        return 'A'.repeat(len+1);
+    } else if (len == 1) {
+        return File.nextChar(char[0]);
+    } else {
+        for (var i = len - 1; i != 0; --i) {
+            char = File.StringReplaceAt(char, i, File.nextChar(char[i]));
+            if (char[i] == '[') {                // '[' == 'Z'.charCodeAt(0) + 1
+                char = File.StringReplaceAt(char, i-1, File.nextChar(char[i-1]));
+                char = File.StringReplaceAt(char, i, 'A');
+            }
+        }
+        return char;
+    }
 };
 
 File.StringReplaceAt = function(str, index, character) {
@@ -154,20 +172,23 @@ File.parseExcelAndSave = function(_req, _name, _file, _user, fn) {
                     sheetColDefs.push({field: tmp,
                         width: maxWidthdict[tmp] ? maxWidthdict[tmp] * 20 : 20
                         });
+                    /*
                     var len = tmp.length;
                     if (tmp == 'Z'.repeat(len)) {
                         tmp = 'A'.repeat(len+1);
                     } else if (len == 1) {
-                        tmp = File.StringNextChar(tmp[0]);
+                        tmp = File.nextChar(tmp[0]);
                     } else {
                         for (var i = len - 1; i != 0; --i) {
-                            tmp = File.StringReplaceAt(tmp, i, File.StringNextChar(tmp[0]));
+                            tmp = File.StringReplaceAt(tmp, i, File.nextChar(tmp[0]));
                             if (tmp[i] == '[') {                // '[' == 'Z'.charCodeAt(0) + 1
-                                tmp = File.StringReplaceAt(tmp, i-1, File.StringNextChar(tmp[0]));
+                                tmp = File.StringReplaceAt(tmp, i-1, File.nextChar(tmp[0]));
                                 tmp = File.StringReplaceAt(tmp, i, 'A');
                             }
                         }
                     }
+                    */
+                    tmp = File.CharIncrement(tmp);
                 }
                 //have valid data
                 if (sheetColDefs.length > 1) {
@@ -190,64 +211,54 @@ File.parseExcelAndSave = function(_req, _name, _file, _user, fn) {
     });
 };
 
-File.findFileByName = function(filename, fn) {
-    db.file.findOne({
-        name: filename,
-        status: 'active'
-    }, fn);
+File.findOneFile = function(query, fn) {
+    db.file.findOne(query, fn);
 };
 
-File.findFileByNameAndUpdate = function(filename, locked, update, fn) {
-    db.file.findOneAndUpdate({
-        name: filename,
-        status: 'active',
-        locked: locked
-    }, update, fn);
+File.findFileAndUpdate= function(query, update, fn) {
+    db.file.findOneAndUpdate(query, update, fn);
 };
 
 
-
-File.requestEditFile = function(filename, fn) {
-    File.findFileByNameAndUpdate(filename, false, {locked: true}, function(err, file) {
+File.requestEditFile = function(req, fn) {
+    File.findFileAndUpdate({name: req.query.filename, status: 'active', locked: 'unlocked'}, {locked: req.user.user}, function(err, file) {
         if (err) return fn(err);
-        if (!file) return fn(null, false);
-        return fn(null, true);
+        if (!file) return fn(new Error('请求文件无效!'));
+        return fn(null, file);
     });
 };
 
-File.completeEditFile = function(filename, fn) {
-    File.findFileByNameAndUpdate(filename, true, {locked: false}, function(err, file) {
-        if (err) return fn(err);
-        if (!file) return fn(null, false);
-        return fn(null, true);
-    });
+
+File.findFiles = function(query, fn) {
+    db.file.find(query, fn);
 };
 
-File.findFilesByGroup = function(group, fn) {
-    db.file.find({
-        'Rights.GroupRW' : group,
-        status: 'active'
-    }, fn);
-};
 
 File.filenameValidate = function(filename, fn) {
-    File.findFileByName(filename, function(err, file) {
+    File.findOneFile({
+        name: filename,
+        status: 'active'
+    }, function(err, file) {
         if (err) return fn(err);
         if (file) return fn(null, true);
         return fn(null, false);
     });
 };
 
-File.validFilenames = function(user, fn) {
+File.validFilenamesAndLock = function(user, fn) {
     if (user.group.length == 0) return fn(new Error('用户未分组!'));
-    File.findFilesByGroup(user.group[0], function(err, files) {
+    File.findFiles({
+        'Rights.GroupRW' : user.group[0],
+        status: 'active'
+    }, function(err, files) {
         if (err) return fn(err);
-        var filenames = [];
-        if (!files) return fn(null, filenames);
+        var retfiles = [];
+        if (!files) return fn(null, retfiles);
         files.forEach(function(file) {
-            filenames.push(file.name);
+
+            retfiles.push({filename: file.name, locked: file.locked});
         });
-        fn(null, filenames);
+        fn(null, retfiles);
     });
 };
 

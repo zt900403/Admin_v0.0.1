@@ -41,36 +41,44 @@ router.post('/uploadFile', function(req, res, next) {
 
 });
 
-router.get('/validFilenames', function(req, res, next) {
-    File.validFilenames(req.user, function(err, filenames) {
+router.get('/validFilenamesAndLock', function(req, res, next) {
+    File.validFilenamesAndLock(req.user, function(err, files) {
         if (err) return res.status(500).json({err: err.message});
-        res.json(filenames);
+        res.json(files);
     });
 });
 
 router.get('/fileByName', function(req, res, next) {
-    File.findFileByName(req.query.filename, function(err, file) {
+    File.findOneFile({name: req.query.filename}, function(err, file) {
         if (err) return res.status(500).json({err: '读取数据库异常!'});
         res.json(file);
     });
 });
 
 router.post('/requestEditFile', function(req, res, next) {
-    File.requestEditFile(req.query.filename, function(err, result) {
-        if (err) return res.status(500).json({err: '读取数据库异常!'});
-        if (!result) return res.status(400).json({err: '请求编辑失败! 该文档已上锁!'});
-        res.json({result: '请求编辑成功!'});
+    File.requestEditFile(req, function(err, file) {
+        if (err) return res.status(500).json({err: '请求文件无效,或文件已经上锁!'});
+        if (!file) return res.status(400).json({err: '请求编辑失败! 该文档已上锁!'});
+        res.json(file);
     });
 });
 
-router.post('/completeEditFile', function(req, res, next) {
-    File.completeEditFile(req.query.filename, function(err, result) {
+router.post('/updateFile', function(req, res, next) {
+    var file = JSON.parse(req.query.file);
+    File.findFileAndUpdate({name: file.name, locked: req.user.user}, file, function(err, file) {
         if (err) return res.status(500).json({err: '读取数据库异常!'});
-        if (!result) return res.status(400).json({err: '文件锁异常!'});
-        res.json({result: '编辑成功!'});
+        if (!file)  return res.status(400).json({err: '文件不存在!'});
+        return res.json({result: '更新文件完毕!'});
     });
 });
 
+router.get('/fileLockStatus', function(req, res, next) {
+    File.findOneFile({name: req.query.filename, status: 'active'}, function(err, file) {
+        if (err) return res.status(500).json({err: '读取数据库异常!'});
+        if (!file) return res.status(400).json({err: '文件不存在!'});
+        return res.json(file.locked);
+    });
+});
 
 router.basicAuth = function(req, res, next) {
       var user = basicAuth(req);

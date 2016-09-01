@@ -8,14 +8,14 @@ angular.module('AdminApp').controller('TableConfigCtrl', function ($rootScope, $
         $('#messagebox').removeClass('hide');
         $scope.messagebox = {};
         $scope.messagebox.message = msg;
-        $scope.messagebox.style = 'alert-danger';
+        $scope.messagebox.class = 'alert-danger';
     };
 
     $scope.message = function (msg) {
         $('#messagebox').removeClass('hide');
         $scope.messagebox = {};
         $scope.messagebox.message = msg;
-        $scope.messagebox.style = 'alert-success';
+        $scope.messagebox.class = 'alert-success';
     };
 
     $scope.submit = function() {

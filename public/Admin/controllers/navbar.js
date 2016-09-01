@@ -34,14 +34,14 @@ angular.module('AdminApp').controller('NavbarCtrl', function ($rootScope, $scope
 
     $scope.updateFilenames = function() {
         $http({
-            url: '/Admin/api/auth/validFilenames',
+            url: '/Admin/api/auth/validFilenamesAndLock',
             method: 'GET',
             headers: {
                 Authorization: 'Basic '
                 + Base64.encode($rootScope.me.user + ':' + $rootScope.me.PWD)
             }
         }).success(function(result) {
-            $scope.filenames = result;
+            $scope.files = result;
         }).error(function(err) {
             alert(err.err);
         });

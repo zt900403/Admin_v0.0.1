@@ -100,8 +100,8 @@ var fileSchema = new Schema({
     Sheets : [sheetSchema],
     comments:[commentSchema],
     locked: {
-        type: Boolean,
-        default: false
+        type: String,
+        default: 'unlocked'
     },
     status: {
         type: String,
