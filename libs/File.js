@@ -110,13 +110,36 @@ File.parseExcelAndSave = function(_req, _name, _file, _user, fn) {
                         {
                             sheetData[idx] = {};
                         }
-                        sheetData[idx][matched[1]] = worksheet[z].v;
+
+                        var cell = worksheet[z];
+
+                        if (cell.t == 'n') {
+                            if (cell.hasOwnProperty('w') && cell.w === String(cell.v) ) {       //parse to Number
+                                sheetData[idx][matched[1]] = cell.v;
+                            } else {
+                                if (cell.hasOwnProperty('w') && cell.w.includes('%')) {     //parse to percent
+                                    sheetData[idx][matched[1]] = cell.w;
+                                } else {                             //parse to date
+                                    delete cell.w;
+                                    cell.z = 'yyyy/mm/dd';
+                                    XLSX.utils.format_cell(cell);
+                                    if (cell.w.length ==0) {
+                                        sheetData[idx][matched[1]] = cell.v;
+                                    } else {
+                                        sheetData[idx][matched[1]] = cell.w;
+                                    }
+                                }
+
+                            }
+                        } else {
+                            sheetData[idx][matched[1]] = cell.v;
+                        }
 
 
                         if (!maxWidthdict[matched[1]]) {
-                            maxWidthdict[matched[1]] = worksheet[z].v.length;
-                        } else if (maxWidthdict[matched[1]] < worksheet[z].v.length){
-                            maxWidthdict[matched[1]] = worksheet[z].v.length;
+                            maxWidthdict[matched[1]] = sheetData[idx][matched[1]].toString().length;
+                        } else if (maxWidthdict[matched[1]] < sheetData[idx][matched[1]].length){
+                            maxWidthdict[matched[1]] = sheetData[idx][matched[1]].toString().length;
                         }
                     }
                 }
@@ -129,7 +152,8 @@ File.parseExcelAndSave = function(_req, _name, _file, _user, fn) {
                 var tmp = 'A';
                 while ( File.StringCompareTo(tmp, lastHeader) != 1 ) {
                     sheetColDefs.push({field: tmp,
-                        width: maxWidthdict[tmp] ? maxWidthdict[tmp] * 20 : 20});
+                        width: maxWidthdict[tmp] ? maxWidthdict[tmp] * 20 : 20
+                        });
                     var len = tmp.length;
                     if (tmp == 'Z'.repeat(len)) {
                         tmp = 'A'.repeat(len+1);
@@ -168,13 +192,41 @@ File.parseExcelAndSave = function(_req, _name, _file, _user, fn) {
 
 File.findFileByName = function(filename, fn) {
     db.file.findOne({
-        name: filename
+        name: filename,
+        status: 'active'
     }, fn);
+};
+
+File.findFileByNameAndUpdate = function(filename, locked, update, fn) {
+    db.file.findOneAndUpdate({
+        name: filename,
+        status: 'active',
+        locked: locked
+    }, update, fn);
+};
+
+
+
+File.requestEditFile = function(filename, fn) {
+    File.findFileByNameAndUpdate(filename, false, {locked: true}, function(err, file) {
+        if (err) return fn(err);
+        if (!file) return fn(null, false);
+        return fn(null, true);
+    });
+};
+
+File.completeEditFile = function(filename, fn) {
+    File.findFileByNameAndUpdate(filename, true, {locked: false}, function(err, file) {
+        if (err) return fn(err);
+        if (!file) return fn(null, false);
+        return fn(null, true);
+    });
 };
 
 File.findFilesByGroup = function(group, fn) {
     db.file.find({
-        'Rights.GroupRW' : group
+        'Rights.GroupRW' : group,
+        status: 'active'
     }, fn);
 };
 

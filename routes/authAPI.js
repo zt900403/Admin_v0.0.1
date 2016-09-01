@@ -55,6 +55,23 @@ router.get('/fileByName', function(req, res, next) {
     });
 });
 
+router.post('/requestEditFile', function(req, res, next) {
+    File.requestEditFile(req.query.filename, function(err, result) {
+        if (err) return res.status(500).json({err: '读取数据库异常!'});
+        if (!result) return res.status(400).json({err: '请求编辑失败! 该文档已上锁!'});
+        res.json({result: '请求编辑成功!'});
+    });
+});
+
+router.post('/completeEditFile', function(req, res, next) {
+    File.completeEditFile(req.query.filename, function(err, result) {
+        if (err) return res.status(500).json({err: '读取数据库异常!'});
+        if (!result) return res.status(400).json({err: '文件锁异常!'});
+        res.json({result: '编辑成功!'});
+    });
+});
+
+
 router.basicAuth = function(req, res, next) {
       var user = basicAuth(req);
       if (!user || !user.name || !user.pass || user.pass == 'undefined' || !req.session.uid) {

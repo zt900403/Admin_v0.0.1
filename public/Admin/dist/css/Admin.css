@@ -353,3 +353,6 @@ table.dataTable thead .sorting:after {
     color: #df8a13;
 }
 
+.btn-space {
+    margin-right: 20px;
+}

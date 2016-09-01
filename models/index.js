@@ -27,6 +27,7 @@ exports.file = mongoose.model('file', require('./file'));
 exports.file.prototype.toJSON = function() {
     return {
         owner: this.owner,
+        name: this.name,
         CTime: this.CTime,
         MTime: this.MTime,
         MUser: this.MUser,

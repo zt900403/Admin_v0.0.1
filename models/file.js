@@ -12,6 +12,10 @@ var sheetColDefsSchema = new Schema({
     },
     displayName: String,
     enableCellEdit: Boolean,
+    type : {
+        type: String,
+        default: 'string'
+    },
     width: {
         type: Number,
         required: true
@@ -29,6 +33,10 @@ var sheetSchema = new Schema({
     lastHeader: {
         type: String,
         required: true
+    },
+    status: {
+        type: String,
+        default: 'active'           //active discard
     },
     columnDefs : [sheetColDefsSchema],
     rowDatas: []
