@@ -41,6 +41,18 @@ router.post('/uploadFile', function(req, res, next) {
 
 });
 
+router.post('/createBlankFile', function(req, res, next) {
+    File.filenameValidate(req.query.filename, function(err, exists) {
+        if (err) return res.status(500).json({err : '数据库读取异常!'});
+        if (exists) return res.status(400).json({err: '表名字已存在! 请更换一个!'});
+        File.createBlankFile(req, function(err) {
+            if (err) return res.status(500).json({err: err.message});
+            res.json({result: '创建成功!'});
+        });
+    });
+});
+
+
 router.get('/validFilenamesAndLock', function(req, res, next) {
     File.validFilenamesAndLock(req.user, function(err, files) {
         if (err) return res.status(500).json({err: err.message});
@@ -72,12 +84,20 @@ router.post('/cancelEditFile', function(req, res, next) {
 });
 
 router.post('/updateFile', function(req, res, next) {
-    var file = JSON.parse(req.query.file);
-    File.findFileAndUpdate({name: file.name, locked: req.user.user}, file, function(err, file) {
-        if (err) return res.status(500).json({err: '读取数据库异常!'});
-        if (!file)  return res.status(400).json({err: '文件不存在!'});
-        return res.json({result: '更新文件完毕!'});
+
+    var form = new multiparty.Form();
+    form.parse(req, function(err, fields, files) {
+        if (err) return res.status(500).json({err: '解析表单失败!'});
+        if (fields.file.length == 0) return res.status(400).json({err: '无效的输入文件!'});
+        var inputFile = JSON.parse(fields.file[0]);
+        File.findFileAndUpdate({name: inputFile.name, locked: req.user.user}, inputFile, function(err, file) {
+            if (err) return res.status(500).json({err: '读取数据库异常!'});
+            if (!file)  return res.status(400).json({err: '文件不存在!'});
+            return res.json({result: '更新文件完毕!'});
+        });
+
     });
+
 });
 
 router.get('/fileLockStatus', function(req, res, next) {

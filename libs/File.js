@@ -262,4 +262,18 @@ File.validFilenamesAndLock = function(user, fn) {
     });
 };
 
+File.createBlankFile = function(req, fn) {
+    var fileObj = {};
+    fileObj.name = req.query.filename;
+    fileObj.owner = fileObj.MUser = req.user.user;
+    fileObj.Rights = {};
+    fileObj.Rights.GroupRW = ['default'];
+
+    var fileModel = new db.file(fileObj);
+    fileModel.save(function(err) {
+        if (err) return fn(err);
+        fn();
+    });
+};
+
 module.exports = File;

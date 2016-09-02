@@ -7,28 +7,28 @@
     </div>
     <!-- /.row -->
     <div class="row" >
-        <div class="col-lg-12">
+        <div class="col-lg-6">
             <div class="panel panel-default">
                 <div class="panel-heading">
                     创建或上传文件
                 </div>
                 <div class="panel-body">
                     <div class="row">
-                        <div class="col-lg-6">
+                        <div class="col-lg-12">
                             <form role="form" ng-controller="TableConfigCtrl" ng-submit="submit()">
                                 <div class="form-group">
-                                    <label>文件名</label>
-                                    <input type="text" required class="form-control" ng-model="name" placeholder="文件名">
+                                    <label>表名</label>
+                                    <input type="text" required class="form-control" ng-model="name" placeholder="新建表名">
                                 </div>
                                 <div class="form-group">
                                     <div class="checkbox">
                                         <label>
-                                            <input type="checkbox" value="">我要上传Excel做为数据源
+                                            <input type="checkbox" ng-model="fileuploadChecked">我要上传Excel做为数据源
                                         </label>
                                     </div>
                                 </div>
 
-                                <div class="form-group">
+                                <div ng-if="fileuploadChecked" class="form-group">
                                     <input type="file" required accept=".xls,.xlsx,.ods" file-model="myFiles" multiple="false">
                                 </div>
                                 <div ng-include="'./pages/elements/messagebox.html'"></div>
@@ -36,21 +36,36 @@
                                 <button type="reset" class="btn btn-default">重置</button>
                             </form>
                         </div>
-                        <!-- /.col-lg-6 (nested) -->
-                        <div class="col-lg-6">
+                    </div>
+                    <!-- /.row (nested) -->
+                </div>
+                <!-- /.panel-body -->
+            </div>
+            <!-- /.panel -->
+        </div>
+        <div class="col-lg-6">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    删除报表
+                </div>
+                <div class="panel-body">
+                    <div class="row">
+                        <div class="col-lg-12">
                             <form role="form" ng-controller="TableConfigCtrl" ng-submit="submit()">
                                 <div class="form-group">
-                                    <label>新建文件名</label>
-                                    <input type="text" class="form-control" ng-model="name" placeholder="文件名">
-                                    <p class="help-block">新创建的文件名称.</p>
+                                    <label>选择要删除的报表</label>
+                                    <select multiple ng-model="deleteFiles" class="form-control">
+                                        <option>1</option>
+                                        <option>2</option>
+                                        <option>3</option>
+                                        <option>4</option>
+                                        <option>5</option>
+                                    </select>
                                 </div>
-
-                                <div ng-include="'./pages/elements/messagebox.html'"></div>
                                 <button type="submit" class="btn btn-success">提交</button>
-
+                                <button type="reset" class="btn btn-default">重置</button>
                             </form>
                         </div>
-                        <!-- /.col-lg-6 (nested) -->
                     </div>
                     <!-- /.row (nested) -->
                 </div>

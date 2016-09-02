@@ -87,10 +87,7 @@ var fileSchema = new Schema({
         type: String,
         required: true
     },
-    path: {
-        type: String,
-        required: true
-    },
+    path: String,
     Rights: {
         RW: [],
         M: [],

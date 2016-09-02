@@ -133,31 +133,32 @@ angular.module('AdminApp').controller('TableCtrl', function ($rootScope, $scope,
             file.MUser = $rootScope.me.user;
             file.MTime = Date.now();
             file.locked = 'unlocked';
-            $http({
-                url: '/Admin/api/auth/updateFile',
-                method: 'POST',
-                params : {file: file},
-                headers: {
-                    Authorization: 'Basic '
-                    + Base64.encode($rootScope.me.user + ':' + $rootScope.me.PWD)
-                }
-            }).success(function(result) {
-                $('#tablePanel').removeClass('panel-danger');
-                $('#tablePanel').addClass('panel-success');
 
-                $scope.editing = false;
-                $scope.file = file;
-                $scope.file.locked = 'unlocked';
-                $scope.msgDialog('成功', result.result);
+        var fd = new FormData();
 
-            }).error(function(err) {
-                $scope.msgDialog('错误', err.err);
-            }).then(function(){
-                $scope.showSheet($scope.currentSheetname);
-                $rootScope.$broadcast('updateFilenames');
+        fd.append('file', JSON.stringify(file));
 
-            });;
+        $http.post('/Admin/api/auth/updateFile', fd, {
+            transformRequest: angular.identity,
+            headers: {
+                'Content-Type': undefined,
+                'Authorization': 'Basic '
+                + Base64.encode($rootScope.me.user + ':' + $rootScope.me.PWD)
+            }
+        }).success(function(result){
+            $('#tablePanel').removeClass('panel-danger');
+            $('#tablePanel').addClass('panel-success');
 
+            $scope.editing = false;
+            $scope.file = file;
+            $scope.file.locked = 'unlocked';
+            $scope.msgDialog('成功', result.result);
+        }).error(function(result) {
+            $scope.msgDialog('错误', err.err);
+        }).finally(function() {
+            $scope.showSheet($scope.currentSheetname);
+            $rootScope.$broadcast('updateFilenames');
+        });
 
     };
 
@@ -232,6 +233,10 @@ angular.module('AdminApp').controller('TableCtrl', function ($rootScope, $scope,
             }
             if (result.Sheets.length != 0) {
                 $scope.showSheet(result.Sheets[0].name);
+            } else {
+
+                $scope.gridOptions.columnDefs = [];
+                $scope.gridOptions.data = [];
             }
         }).error(function(err) {
             $scope.msgDialog('错误',err.err);
