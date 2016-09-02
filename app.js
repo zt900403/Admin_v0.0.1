@@ -29,7 +29,7 @@ if (app.get('env') === 'development') {
     app.use(logger('dev'));
 } else {
     var log = fs.createWriteStream('../var/log/request.log', { flags: 'a'});
-    app.use(logger(':date : :method :url :status',{stream: log }));
+    app.use(logger(':date : :method :url :status :response-time',{stream: log }));
 
 }
 

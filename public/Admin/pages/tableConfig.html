@@ -17,14 +17,18 @@
                         <div class="col-lg-6">
                             <form role="form" ng-controller="TableConfigCtrl" ng-submit="submit()">
                                 <div class="form-group">
-                                    <label>表名</label>
+                                    <label>文件名</label>
                                     <input type="text" required class="form-control" ng-model="name" placeholder="文件名">
-                                    <p class="help-block">将文件在服务器解析为该表名.</p>
+                                </div>
+                                <div class="form-group">
+                                    <div class="checkbox">
+                                        <label>
+                                            <input type="checkbox" value="">我要上传Excel做为数据源
+                                        </label>
+                                    </div>
                                 </div>
 
-
                                 <div class="form-group">
-                                    <label>文件</label>
                                     <input type="file" required accept=".xls,.xlsx,.ods" file-model="myFiles" multiple="false">
                                 </div>
                                 <div ng-include="'./pages/elements/messagebox.html'"></div>

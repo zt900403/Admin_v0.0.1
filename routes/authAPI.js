@@ -48,7 +48,7 @@ router.get('/validFilenamesAndLock', function(req, res, next) {
     });
 });
 
-router.get('/fileByName', function(req, res, next) {
+router.get('/getfileByName', function(req, res, next) {
     File.findOneFile({name: req.query.filename}, function(err, file) {
         if (err) return res.status(500).json({err: '读取数据库异常!'});
         res.json(file);
@@ -60,6 +60,14 @@ router.post('/requestEditFile', function(req, res, next) {
         if (err) return res.status(500).json({err: '请求文件无效,或文件已经上锁!'});
         if (!file) return res.status(400).json({err: '请求编辑失败! 该文档已上锁!'});
         res.json(file);
+    });
+});
+
+router.post('/cancelEditFile', function(req, res, next) {
+    File.findFileAndUpdate({name: req.query.filename, locked: req.user.user}, {locked: 'unlocked'}, function(err, file) {
+        if (err) return res.status(500).json({err: '读取数据库异常!'});
+        if (!file) return res.status(400).json({err: '请求文件不存在,或该文件已上锁!'});
+        res.json({result:'取消编辑成功!'});
     });
 });
 

@@ -2,31 +2,81 @@
  * Created by Lenovo on 2016/8/26.
  */
 
-angular.module('AdminApp').controller('TableCtrl', function ($rootScope, $scope, $http, $timeout, Base64) {
+angular.module('AdminApp').controller('TableCtrl', function ($rootScope, $scope, $http, $timeout, $q, Base64) {
 
     $scope.editing = false;
-    $scope.haveChange = false;
 
-    $scope.error = function (msg) {
-        $('#messagebox').removeClass('hide');
-        $scope.messagebox = {};
-        $scope.messagebox.message = msg;
-        $scope.messagebox.class = 'alert-danger ';
-        $scope.messagebox.style = { width: '300px',
-        height: '20px',
-            padding: '0 20px',
-        margin: '0 0 0 0'};
+
+    $scope.msgDialog = function(title, msg) {
+        BootstrapDialog.show({
+            title: title,
+            message: msg,
+            buttons: [{
+                label: '关闭',
+                action: function(dialog) {
+                    dialog.close();
+                }
+            }]
+        });
     };
 
-    $scope.message = function (msg) {
-        $('#messagebox').removeClass('hide');
-        $scope.messagebox = {};
-        $scope.messagebox.message = msg;
-        $scope.messagebox.class = 'alert-success';
-        $scope.messagebox.style = { width: '300px',
-            height: '20px',
-            padding: '0 20px',
-            margin: '0 0 0 0'};
+    $scope.addNewSheetq = function(sheetname) {
+        var deferred = $q.defer();
+        if (!validSheetname(sheetname)) {
+            deferred.reject('重复的分页名 : [ <strong>'+ sheetname + '</strong> ]');
+            return deferred.promise;
+        }
+        $scope.addNewSheet(sheetname);
+        deferred.resolve('新分页[ <strong>'+ sheetname +'</strong> ]创建成功!');
+        return deferred.promise;
+    };
+
+    $scope.inputDialog = function(title, msg, fn) {
+        BootstrapDialog.show({
+            title: title,
+            message: msg + ':' + '<input type="text" class="form-control">',
+            closable: true, // <-- Default value is false
+            draggable: true, // <-- Default value is false
+            buttons: [{
+                    id: 'close',
+                    label: '关闭',
+                    action: function(dialog) {
+                        dialog.close();
+                    }
+                },
+                {
+                    id : 'confirm',
+                    label: '确认',
+                    cssClass: 'btn-primary',
+                    action: function(dialog) {
+                        var input = dialog.getModalBody().find('input').val();
+                        if (fn) {
+                            fn(input).then(function(result) {
+                                dialog.setMessage(result);
+                            }).catch(function(err) {
+                                dialog.setMessage(err);
+                                dialog.setType(BootstrapDialog.TYPE_DANGER)
+                            }).finally(function() {
+                                dialog.getButton('confirm').remove();
+                            });
+
+                        }
+
+
+                    }
+                }
+            ]
+        });
+    };
+
+    $scope.confirmDialog = function(title, msg, fn) {
+        BootstrapDialog.confirm({
+            title: title,
+            message: msg,
+            btnCancelLabel: '取消',
+            btnOKLabel: '确认',
+            callback: fn
+        });
     };
 
 
@@ -46,14 +96,18 @@ angular.module('AdminApp').controller('TableCtrl', function ($rootScope, $scope,
             $('#tablePanel').addClass('panel-danger');
 
             $scope.editing = true;
-            $scope.error('请求编辑成功! 您可以开始修改文档了!');
+            $scope.msgDialog('成功','请求编辑成功! 您可以开始修改文档了!');
             $scope.file = file;
-            $scope.file.locked = $rootScope.me.user;
+            $scope.file.locked = $rootScope.me.user
             $scope.showSheet($scope.currentSheetname);
+
         }).error(function(err) {
-            $scope.error(err.err);
+            $scope.msgDialog('错误',err.err);
+        }).then(function(){
+            $scope.showSheet($scope.currentSheetname);
+            $rootScope.$broadcast('updateFilenames');
         });
-        $rootScope.$broadcast('updateFilenames');
+
     };
 
 
@@ -94,12 +148,15 @@ angular.module('AdminApp').controller('TableCtrl', function ($rootScope, $scope,
                 $scope.editing = false;
                 $scope.file = file;
                 $scope.file.locked = 'unlocked';
-                $scope.message(result.result);
+                $scope.msgDialog('成功', result.result);
+
             }).error(function(err) {
-                $scope.error(err.err);
-            });
-            $rootScope.$broadcast('updateFilenames');
-            $scope.haveChange = false;
+                $scope.msgDialog('错误', err.err);
+            }).then(function(){
+                $scope.showSheet($scope.currentSheetname);
+                $rootScope.$broadcast('updateFilenames');
+
+            });;
 
 
     };
@@ -126,9 +183,7 @@ angular.module('AdminApp').controller('TableCtrl', function ($rootScope, $scope,
         gridApi.edit.on.afterCellEdit($scope,function(rowEntity, colDef, newValue, oldValue){
             $scope.$apply();
             if (!$scope.editing) {
-                alert('请点击编辑按钮!');
-            } else {
-                $scope.haveChange = true;
+                $scope.msgDialog('错误','请点击编辑按钮!');
             }
         });
 
@@ -153,7 +208,7 @@ angular.module('AdminApp').controller('TableCtrl', function ($rootScope, $scope,
 
     $scope.$on('loadFile', function(event, args) {
         $http({
-            url: '/Admin/api/auth/fileByName',
+            url: '/Admin/api/auth/getfileByName',
             method: 'GET',
             params : {filename: args},
             headers: {
@@ -168,12 +223,18 @@ angular.module('AdminApp').controller('TableCtrl', function ($rootScope, $scope,
                     $('#tablePanel').removeClass('panel-success');
                     $('#tablePanel').addClass('panel-danger');
                 }, 0)
+            } else {
+                $scope.editing = false;
+                $timeout(function() {
+                    $('#tablePanel').removeClass('panel-danger');
+                    $('#tablePanel').addClass('panel-success');
+                }, 0)
             }
             if (result.Sheets.length != 0) {
                 $scope.showSheet(result.Sheets[0].name);
             }
         }).error(function(err) {
-            alert(err.err);
+            $scope.msgDialog('错误',err.err);
         });
     });
 
@@ -220,7 +281,7 @@ angular.module('AdminApp').controller('TableCtrl', function ($rootScope, $scope,
         var nextHeader = $scope.CharIncrement(currentSheet.lastHeader);
         currentSheet.lastHeader = nextHeader;
         currentSheet.columnDefs.push({field: nextHeader, width: 20});
-    }
+    };
 
     $scope.removeColumn = function() {
         var currentSheet;
@@ -231,9 +292,106 @@ angular.module('AdminApp').controller('TableCtrl', function ($rootScope, $scope,
             }
         }
 
-        var len = currentSheet.rowDatas.length;
-        var preLastHeader = currentSheet.columnDefs[len-2].field;
-        currentSheet.lastHeader = preLastHeader;
-        currentSheet.columnDefs.pop();
+        var len = currentSheet.columnDefs.length;
+        if (len > 1) {
+            var preLastHeader = currentSheet.columnDefs[len-2].field;
+            currentSheet.lastHeader = preLastHeader;
+            currentSheet.columnDefs.pop();
+        }
+    };
+
+    $scope.addRow = function() {
+        var currentSheet;
+        for (var i = 0, sheets = $scope.file.Sheets, len = sheets.length; i < len; ++i) {
+            if(sheets[i].name == $scope.currentSheetname) {
+                currentSheet = sheets[i];
+                break;
+            }
+        }
+        currentSheet.rowDatas.push({index: currentSheet.rowDatas.length + 1});
+    };
+
+    $scope.removeRow = function() {
+        var currentSheet;
+        for (var i = 0, sheets = $scope.file.Sheets, len = sheets.length; i < len; ++i) {
+            if(sheets[i].name == $scope.currentSheetname) {
+                currentSheet = sheets[i];
+                break;
+            }
+        }
+
+        currentSheet.rowDatas.pop();
+    };
+
+
+    var validSheetname = function(sheetname) {
+        for (var i = 0, len = $scope.file.Sheets.length; i < len; ++i) {
+            if (sheetname == $scope.file.Sheets[i].name) {
+                return false;
+            }
+        }
+        return true;
+    };
+
+    $scope.addNewSheet = function(sheetname) {
+        var newSheet = {};
+        newSheet.name = sheetname;
+        newSheet.lastHeader = 'A';
+        newSheet.columnDefs = [{field: 'index', type: 'string', width: 20}];
+        newSheet.rowDatas = [{index: 1}];
+        $scope.file.Sheets.push(newSheet);
+        $timeout(function() {
+            $scope.showSheet(sheetname);
+        }, 0);
+
+    };
+
+
+
+    $scope.removeCurrentSheet = function() {
+        $scope.confirmDialog('删除分页', '确认删除分页[ <strong>' +$scope.currentSheetname + '</strong> ] ?',
+            function(result) {
+                if (result) {
+                    var sheetname = $scope.currentSheetname;
+                    $timeout(function () {
+                        for (var i = 0, len = $scope.file.Sheets.length; i < len; ++i) {
+                            if (sheetname == $scope.file.Sheets[i].name) {
+                                $scope.file.Sheets.splice(i, 1);
+                                break;
+                            }
+                        }
+                    }, 0);
+                } else {
+
+                }
+            });
+    };
+
+    $scope.cancelEditFile = function() {
+        $scope.confirmDialog('取消修改', '确认放弃修改文件吗?', function(result) {
+            if (result) {
+                $http({
+                    url: '/Admin/api/auth/cancelEditFile',
+                    method: 'POST',
+                    params : {filename: $scope.file.name},
+                    headers: {
+                        Authorization: 'Basic '
+                        + Base64.encode($rootScope.me.user + ':' + $rootScope.me.PWD)
+                    }
+                }).success(function(result) {
+                    $('#tablePanel').removeClass('panel-danger');
+                    $('#tablePanel').addClass('panel-success');
+
+                    $scope.editing = false;
+                    $scope.file.locked = 'unlocked';
+                    $scope.showSheet($scope.currentSheetname);
+
+                }).error(function(err) {
+                    $scope.msgDialog('错误',err.err);
+                }).then(function(){
+                    $rootScope.$broadcast('updateFilenames');
+                });
+            }
+        });
     }
 });
