@@ -6,7 +6,7 @@ var path = require('path');
 var join = path.join;
 var fs = require('fs');
 var XLSX = require('xlsx');
-
+var async = require('async');
 
 function File(obj) {
     this.File = obj;
@@ -273,6 +273,34 @@ File.createBlankFile = function(req, fn) {
     fileModel.save(function(err) {
         if (err) return fn(err);
         fn();
+    });
+};
+
+File.removeFiles = function(filenames, fn) {
+    var calls = [];
+    var ret = [];
+    var errs = [];
+    var collector = function(err, name) {
+        if (err) errs.push(err);
+        if (name) ret.push(name);
+    };
+    filenames.forEach(function(filename) {
+        calls.push(function(collector) {
+            db.file.remove({name: filename}, function(err) {
+                if (err) return collector(err);
+                collector(null, filename);
+            });
+        });
+    });
+    async.parallel(calls, function(err, result) {
+        if (err) return fn(err);
+        fn(null, ret);
+    });
+};
+
+File.removeFile = function(filename, fn) {
+    db.file.remove({name: filename}, function(err) {
+        fn(err);
     });
 };
 

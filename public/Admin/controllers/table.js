@@ -6,8 +6,18 @@ angular.module('AdminApp').controller('TableCtrl', function ($rootScope, $scope,
 
     $scope.editing = false;
 
+    errorDialog = function(title, msg, fn) {
+        BootstrapDialog.confirm({
+            title: title,
+            type: BootstrapDialog.TYPE_DANGER,
+            message: msg,
+            btnCancelLabel: '取消',
+            btnOKLabel: '确认',
+            callback: fn
+        });
+    };
 
-    $scope.msgDialog = function(title, msg) {
+    msgDialog = function(title, msg) {
         BootstrapDialog.show({
             title: title,
             message: msg,
@@ -61,8 +71,6 @@ angular.module('AdminApp').controller('TableCtrl', function ($rootScope, $scope,
                             });
 
                         }
-
-
                     }
                 }
             ]
@@ -96,13 +104,13 @@ angular.module('AdminApp').controller('TableCtrl', function ($rootScope, $scope,
             $('#tablePanel').addClass('panel-danger');
 
             $scope.editing = true;
-            $scope.msgDialog('成功','请求编辑成功! 您可以开始修改文档了!');
+            msgDialog('成功','请求编辑成功! 您可以开始修改文档了!');
             $scope.file = file;
             $scope.file.locked = $rootScope.me.user
             $scope.showSheet($scope.currentSheetname);
 
         }).error(function(err) {
-            $scope.msgDialog('错误',err.err);
+            errorDialog('错误',err.err);
         }).then(function(){
             $scope.showSheet($scope.currentSheetname);
             $rootScope.$broadcast('updateFilenames');
@@ -152,9 +160,9 @@ angular.module('AdminApp').controller('TableCtrl', function ($rootScope, $scope,
             $scope.editing = false;
             $scope.file = file;
             $scope.file.locked = 'unlocked';
-            $scope.msgDialog('成功', result.result);
+            msgDialog('成功', result.result);
         }).error(function(result) {
-            $scope.msgDialog('错误', err.err);
+            errorDialog('错误', err.err);
         }).finally(function() {
             $scope.showSheet($scope.currentSheetname);
             $rootScope.$broadcast('updateFilenames');
@@ -184,7 +192,7 @@ angular.module('AdminApp').controller('TableCtrl', function ($rootScope, $scope,
         gridApi.edit.on.afterCellEdit($scope,function(rowEntity, colDef, newValue, oldValue){
             $scope.$apply();
             if (!$scope.editing) {
-                $scope.msgDialog('错误','请点击编辑按钮!');
+                errorDialog('错误','请点击编辑按钮!');
             }
         });
 
@@ -239,7 +247,7 @@ angular.module('AdminApp').controller('TableCtrl', function ($rootScope, $scope,
                 $scope.gridOptions.data = [];
             }
         }).error(function(err) {
-            $scope.msgDialog('错误',err.err);
+            errorDialog('错误',err.err);
         });
     });
 
@@ -362,6 +370,8 @@ angular.module('AdminApp').controller('TableCtrl', function ($rootScope, $scope,
                         for (var i = 0, len = $scope.file.Sheets.length; i < len; ++i) {
                             if (sheetname == $scope.file.Sheets[i].name) {
                                 $scope.file.Sheets.splice(i, 1);
+                                $scope.gridOptions.columnDefs = [];
+                                $scope.gridOptions.data = [];
                                 break;
                             }
                         }
@@ -392,7 +402,7 @@ angular.module('AdminApp').controller('TableCtrl', function ($rootScope, $scope,
                     $scope.showSheet($scope.currentSheetname);
 
                 }).error(function(err) {
-                    $scope.msgDialog('错误',err.err);
+                    errorDialog('错误',err.err);
                 }).then(function(){
                     $rootScope.$broadcast('updateFilenames');
                 });

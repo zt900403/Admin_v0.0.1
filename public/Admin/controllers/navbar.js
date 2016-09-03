@@ -41,7 +41,7 @@ angular.module('AdminApp').controller('NavbarCtrl', function ($rootScope, $scope
                 + Base64.encode($rootScope.me.user + ':' + $rootScope.me.PWD)
             }
         }).success(function(result) {
-            $scope.files = result;
+            $rootScope.files = result;
         }).error(function(err) {
             alert(err.err);
         });

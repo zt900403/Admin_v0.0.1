@@ -63,7 +63,7 @@
                     <a id="navTable" href="/Admin/#/" ng-init="siderNavBarInit()"><i class="fa fa-table fa-fw" ></i> 报表<span class="fa arrow"></span></a>
                     <ul class="nav nav-second-level pre-scrollable" style="max-height:550px;">
                             <li>
-                                <a href="#/" ng-repeat="file in files"  ng-click="loadFile(file.filename)">{{file.filename}}
+                                <a href="#/" ng-repeat="file in $root.files"  ng-click="loadFile(file.filename)">{{file.filename}}
                                     <i ng-if="file.locked != 'unlocked'" class="fa fa-lock" ></i>
                                     <i ng-if="file.locked == $root.me.user" class="fa fa-user" ></i>
                                 </a>

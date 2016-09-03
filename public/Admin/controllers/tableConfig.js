@@ -4,19 +4,6 @@
 
 angular.module('AdminApp').controller('TableConfigCtrl', function ($rootScope, $scope, $http, Base64) {
 
-    $scope.error = function (msg) {
-        $('#messagebox').removeClass('hide');
-        $scope.messagebox = {};
-        $scope.messagebox.message = msg;
-        $scope.messagebox.class = 'alert-danger';
-    };
-
-    $scope.message = function (msg) {
-        $('#messagebox').removeClass('hide');
-        $scope.messagebox = {};
-        $scope.messagebox.message = msg;
-        $scope.messagebox.class = 'alert-success';
-    };
 
     $scope.submit = function() {
         if ($scope.fileuploadChecked) {
@@ -32,10 +19,10 @@ angular.module('AdminApp').controller('TableConfigCtrl', function ($rootScope, $
                     + Base64.encode($rootScope.me.user + ':' + $rootScope.me.PWD)
                 }
             }).success(function(result){
-                $scope.message(result.result);
+                confirmDialog('成功',result.result);
                 $rootScope.$broadcast('updateFilenames', null);
             }).error(function(result) {
-                $scope.error(result.err);
+                confirmDialog('失败',result.err);
             }).finally(function() {
                 $rootScope.$broadcast('updateFilenames');
             });
@@ -49,12 +36,53 @@ angular.module('AdminApp').controller('TableConfigCtrl', function ($rootScope, $
                     + Base64.encode($rootScope.me.user + ':' + $rootScope.me.PWD)
                 }
             }).success(function(result) {
-               $scope.message(result.result);
+                confirmDialog('成功',result.result);
             }).error(function(err) {
-               $scope.error(err.err);
+                errorDialog('失败',err.err);
             }).finally(function() {
                 $rootScope.$broadcast('updateFilenames');
             });
         }
-    }
+    };
+
+    confirmDialog = function(title, msg, fn) {
+        BootstrapDialog.confirm({
+            title: title,
+            message: msg,
+            btnCancelLabel: '取消',
+            btnOKLabel: '确认',
+            callback: fn
+        });
+    };
+    errorDialog = function(title, msg, fn) {
+        BootstrapDialog.confirm({
+            title: title,
+            type: BootstrapDialog.TYPE_DANGER,
+            message: msg,
+            btnCancelLabel: '取消',
+            btnOKLabel: '确认',
+            callback: fn
+        });
+    };
+
+
+    $scope.deleteFileSubmit = function() {
+        confirmDialog('确认删除', '确认删除 ' + '[ <strong>' + $scope.deleteFiles + '</strong> ]?', function() {
+            $http({
+                url: '/Admin/api/auth/removeFiles',
+                method: 'POST',
+                params : {filenames: $scope.deleteFiles},
+                headers: {
+                    Authorization: 'Basic '
+                    + Base64.encode($rootScope.me.user + ':' + $rootScope.me.PWD)
+                }
+            }).success(function(result) {
+
+            }).error(function(err) {
+
+            }).finally(function() {
+                $rootScope.$broadcast('updateFilenames');
+            });
+        });
+    };
 });

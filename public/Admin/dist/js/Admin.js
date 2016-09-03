@@ -176,13 +176,3 @@ app.directive('fileModel', ['$parse', function ($parse) {
         }
     };
 }]);
-
-app.factory('httpq', function($http, $q) {
-    return function() {
-            var deferred = $q.defer();
-            $http(arguments)
-                .success(deferred.resolve)
-                .error(deferred.resolve);
-            return deferred.promise;
-        }
-});

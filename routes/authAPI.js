@@ -5,6 +5,7 @@ var express = require('express');
 var User = require('../libs/User');
 var File = require('../libs/File');
 var basicAuth = require('basic-auth');
+
 var multiparty = require('multiparty');
 
 
@@ -108,6 +109,31 @@ router.get('/fileLockStatus', function(req, res, next) {
     });
 });
 
+
+router.post('/removeFiles', function(req, res, next) {
+    var filenames = req.query.filenames;
+    if (!filenames) return res.status(400).json({err: '无效参数'});
+    if (!Array.isArray(filenames)) {
+        filenames = Array(filenames);
+    }
+    File.removeFiles(filenames, function(err, result) {
+        if (err) return res.status(500).json({err: err.message});
+        res.json(result);
+    });
+});
+
+
+/*
+router.post('/removeFiles', function(req, res, next) {
+    var name = req.query.filenames;
+    File.removeFile(name, function(err, result) {
+        if (err) return res.status(500).json({err: err.message});
+        res.json(result);
+    });
+});
+*/
+
+
 router.basicAuth = function(req, res, next) {
       var user = basicAuth(req);
       if (!user || !user.name || !user.pass || user.pass == 'undefined' || !req.session.uid) {
@@ -120,5 +146,6 @@ router.basicAuth = function(req, res, next) {
           next();
       });
 };
+
 
 module.exports = router;

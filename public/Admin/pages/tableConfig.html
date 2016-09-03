@@ -6,11 +6,13 @@
         <!-- /.col-lg-12 -->
     </div>
     <!-- /.row -->
+
     <div class="row" >
+
         <div class="col-lg-6">
             <div class="panel panel-default">
                 <div class="panel-heading">
-                    创建或上传文件
+                    创建报表
                 </div>
                 <div class="panel-body">
                     <div class="row">
@@ -26,11 +28,10 @@
                                             <input type="checkbox" ng-model="fileuploadChecked">我要上传Excel做为数据源
                                         </label>
                                     </div>
+                                    <input type="file" ng-disabled="!fileuploadChecked" required accept=".xls,.xlsx,.ods" file-model="myFiles" multiple="false">
                                 </div>
 
-                                <div ng-if="fileuploadChecked" class="form-group">
-                                    <input type="file" required accept=".xls,.xlsx,.ods" file-model="myFiles" multiple="false">
-                                </div>
+
                                 <div ng-include="'./pages/elements/messagebox.html'"></div>
                                 <button type="submit" class="btn btn-success">提交</button>
                                 <button type="reset" class="btn btn-default">重置</button>
@@ -51,19 +52,14 @@
                 <div class="panel-body">
                     <div class="row">
                         <div class="col-lg-12">
-                            <form role="form" ng-controller="TableConfigCtrl" ng-submit="submit()">
+                            <form role="form" ng-controller="TableConfigCtrl" ng-submit="deleteFileSubmit()">
                                 <div class="form-group">
                                     <label>选择要删除的报表</label>
                                     <select multiple ng-model="deleteFiles" class="form-control">
-                                        <option>1</option>
-                                        <option>2</option>
-                                        <option>3</option>
-                                        <option>4</option>
-                                        <option>5</option>
+                                        <option ng-repeat="file in $root.files">{{file.filename}}</option>
                                     </select>
                                 </div>
-                                <button type="submit" class="btn btn-success">提交</button>
-                                <button type="reset" class="btn btn-default">重置</button>
+                                <button type="submit" class="btn btn-success">删除</button>
                             </form>
                         </div>
                     </div>
