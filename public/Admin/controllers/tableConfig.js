@@ -59,30 +59,31 @@ angular.module('AdminApp').controller('TableConfigCtrl', function ($rootScope, $
             title: title,
             type: BootstrapDialog.TYPE_DANGER,
             message: msg,
-            btnCancelLabel: '取消',
-            btnOKLabel: '确认',
+            btnCancelLabel: '关闭',
             callback: fn
         });
     };
 
 
     $scope.deleteFileSubmit = function() {
-        confirmDialog('确认删除', '确认删除 ' + '[ <strong>' + $scope.deleteFiles + '</strong> ]?', function() {
-            $http({
-                url: '/Admin/api/auth/removeFiles',
-                method: 'POST',
-                params : {filenames: $scope.deleteFiles},
-                headers: {
-                    Authorization: 'Basic '
-                    + Base64.encode($rootScope.me.user + ':' + $rootScope.me.PWD)
-                }
-            }).success(function(result) {
+        confirmDialog('确认删除', '确认删除 ' + '[ <strong>' + $scope.deleteFiles + '</strong> ]?', function(result) {
+            if (result) {
+                $http({
+                    url: '/Admin/api/auth/removeFiles',
+                    method: 'POST',
+                    params : {filenames: $scope.deleteFiles},
+                    headers: {
+                        Authorization: 'Basic '
+                        + Base64.encode($rootScope.me.user + ':' + $rootScope.me.PWD)
+                    }
+                }).success(function(result) {
 
-            }).error(function(err) {
+                }).error(function(err) {
 
-            }).finally(function() {
-                $rootScope.$broadcast('updateFilenames');
-            });
+                }).finally(function() {
+                    $rootScope.$broadcast('updateFilenames');
+                });
+            }
         });
     };
 });
