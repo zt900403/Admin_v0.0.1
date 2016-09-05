@@ -177,9 +177,9 @@ angular.module('AdminApp').controller('TableCtrl', function ($rootScope, $scope,
         enableColumnResizing: true,
         showGridFooter: true,
         //exporterMenuCsv: true,
-        minRowsToShow : 26,
-        paginationPageSizes: [15, 25, 50, 75, 100],
-        paginationPageSize: 25
+        minRowsToShow : 20,
+        paginationPageSizes: [10, 20, 40, 60, 80],
+        paginationPageSize: 20
     };
 
 
@@ -189,7 +189,7 @@ angular.module('AdminApp').controller('TableCtrl', function ($rootScope, $scope,
         $scope.gridApi = gridApi;
 
 
-        gridApi.edit.on.afterCellEdit($scope,function(rowEntity, colDef, newValue, oldValue){
+        gridApi.edit.on.beginCellEdit($scope,function(rowEntity, colDef, newValue, oldValue){
             $scope.$apply();
             if (!$scope.editing) {
                 errorDialog('错误','请点击编辑按钮!');

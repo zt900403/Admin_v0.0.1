@@ -136,7 +136,7 @@ router.post('/removeFiles', function(req, res, next) {
 
 router.basicAuth = function(req, res, next) {
       var user = basicAuth(req);
-      if (!user || !user.name || !user.pass || user.pass == 'undefined' || !req.session.uid) {
+      if (!user || !user.name || !user.pass || user.pass == 'undefined') { //|| !req.session.uid) {
           res.set('WWW-Authenticate', 'Basic realm=Authorization Required');
           return res.sendStatus(401);
       }
