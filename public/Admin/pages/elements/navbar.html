@@ -12,7 +12,7 @@
             <img alt="Brand" src="./images/logo.gif">
         </a>
 
-        <a class="navbar-brand" href="/Admin">数据中心在线报表系统</a>
+        <a class="navbar-brand" href="/Admin">数据中心在线编辑系统</a>
     </div>
     <!-- /.navbar-header -->
 
@@ -62,12 +62,16 @@
                 <li>
                     <a id="navTable" href="/Admin/#/" ng-init="siderNavBarInit()"><i class="fa fa-table fa-fw" ></i> 报表<span class="fa arrow"></span></a>
                     <ul class="nav nav-second-level pre-scrollable" style="max-height:550px;">
-                            <li>
-                                <a href="#/" ng-repeat="file in $root.files"  ng-click="loadFile(file.filename)">{{file.filename}}
-                                    <i ng-if="file.locked != 'unlocked'" class="fa fa-lock" ></i>
-                                    <i ng-if="file.locked == $root.me.user" class="fa fa-user" ></i>
-                                </a>
-                            </li>
+                        <li>
+                            <a href="#/" ng-repeat="file in $root.files"  ng-click="loadFile(file.filename)">{{file.filename}}
+                                <i ng-if="file.locked != 'unlocked'" class="fa fa-lock" ></i>
+                                <i ng-if="file.locked == $root.me.user" class="fa fa-user" ></i>
+                            </a>
+                        </li>
+                        <li class="nav-divider"></li>
+                        <li>
+                            <a href="#/tableConfig"><i class="fa fa-cog"></i>&nbsp;&nbsp;设&nbsp;置</a>
+                        </li>
                     </ul>
                 </li>
 

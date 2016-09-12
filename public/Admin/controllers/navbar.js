@@ -48,7 +48,9 @@ angular.module('AdminApp').controller('NavbarCtrl', function ($rootScope, $scope
     };
 
     $scope.loadFile = function(filename) {
-        $rootScope.$broadcast('loadFile', filename);
+        $timeout(function(){
+            $rootScope.$broadcast('loadFile', filename);
+        }, 0);
     };
 
     $scope.$on('updateFilenames', function(event, args) {

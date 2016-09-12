@@ -6,7 +6,17 @@ angular.module('AdminApp').controller('TableCtrl', function ($rootScope, $scope,
 
     $scope.editing = false;
 
-    errorDialog = function(title, msg, fn) {
+    var displaySuccessPanel = function() {
+        $('#tablePanel').removeClass('panel-danger');
+        $('#tablePanel').addClass('panel-success');
+    };
+
+    var displayErrorPanel = function() {
+        $('#tablePanel').removeClass('panel-success');
+        $('#tablePanel').addClass('panel-danger');
+    };
+
+    var errorDialog = function(title, msg, fn) {
         BootstrapDialog.confirm({
             title: title,
             type: BootstrapDialog.TYPE_DANGER,
@@ -17,7 +27,7 @@ angular.module('AdminApp').controller('TableCtrl', function ($rootScope, $scope,
         });
     };
 
-    msgDialog = function(title, msg) {
+    var msgDialog = function(title, msg) {
         BootstrapDialog.show({
             title: title,
             message: msg,
@@ -100,8 +110,7 @@ angular.module('AdminApp').controller('TableCtrl', function ($rootScope, $scope,
                 + Base64.encode($rootScope.me.user + ':' + $rootScope.me.PWD)
             }
         }).success(function(file) {
-            $('#tablePanel').removeClass('panel-success');
-            $('#tablePanel').addClass('panel-danger');
+            displayErrorPanel();
 
             $scope.editing = true;
             msgDialog('成功','请求编辑成功! 您可以开始修改文档了!');
@@ -154,8 +163,7 @@ angular.module('AdminApp').controller('TableCtrl', function ($rootScope, $scope,
                 + Base64.encode($rootScope.me.user + ':' + $rootScope.me.PWD)
             }
         }).success(function(result){
-            $('#tablePanel').removeClass('panel-danger');
-            $('#tablePanel').addClass('panel-success');
+            displaySuccessPanel();
 
             $scope.editing = false;
             $scope.file = file;
@@ -230,14 +238,14 @@ angular.module('AdminApp').controller('TableCtrl', function ($rootScope, $scope,
             if (result.locked == $rootScope.me.user) {
                 $scope.editing = true;
                 $timeout(function() {
-                    $('#tablePanel').removeClass('panel-success');
-                    $('#tablePanel').addClass('panel-danger');
+
+                    displayErrorPanel();
                 }, 0)
             } else {
                 $scope.editing = false;
                 $timeout(function() {
-                    $('#tablePanel').removeClass('panel-danger');
-                    $('#tablePanel').addClass('panel-success');
+
+                    displaySuccessPanel();
                 }, 0)
             }
             if (result.Sheets.length != 0) {
@@ -395,9 +403,8 @@ angular.module('AdminApp').controller('TableCtrl', function ($rootScope, $scope,
                         + Base64.encode($rootScope.me.user + ':' + $rootScope.me.PWD)
                     }
                 }).success(function(result) {
-                    $('#tablePanel').removeClass('panel-danger');
-                    $('#tablePanel').addClass('panel-success');
 
+                    displaySuccessPanel();
                     $scope.editing = false;
                     $scope.file.locked = 'unlocked';
                     $scope.showSheet($scope.currentSheetname);
@@ -411,3 +418,8 @@ angular.module('AdminApp').controller('TableCtrl', function ($rootScope, $scope,
         });
     }
 });
+
+
+
+
+//end of file
