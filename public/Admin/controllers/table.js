@@ -267,7 +267,7 @@ angular.module('AdminApp').controller('TableCtrl', function ($rootScope, $scope,
         return null;
     };
 
-    $scope.CharIncrement = function(char) {
+    CharIncrement = function(char) {
         var len = char.length;
         if (char == 'Z'.repeat(len)) {
             return 'A'.repeat(len+1);
@@ -300,7 +300,7 @@ angular.module('AdminApp').controller('TableCtrl', function ($rootScope, $scope,
             }
         }
 
-        var nextHeader = $scope.CharIncrement(currentSheet.lastHeader);
+        var nextHeader = currentSheet.lastHeader ? CharIncrement(currentSheet.lastHeader) : 'A';
         currentSheet.lastHeader = nextHeader;
         currentSheet.columnDefs.push({field: nextHeader, width: 20});
     };
@@ -358,7 +358,7 @@ angular.module('AdminApp').controller('TableCtrl', function ($rootScope, $scope,
     $scope.addNewSheet = function(sheetname) {
         var newSheet = {};
         newSheet.name = sheetname;
-        newSheet.lastHeader = 'A';
+        //newSheet.lastHeader = 'A';
         newSheet.columnDefs = [{field: 'index', type: 'string', width: 20}];
         newSheet.rowDatas = [{index: 1}];
         $scope.file.Sheets.push(newSheet);
