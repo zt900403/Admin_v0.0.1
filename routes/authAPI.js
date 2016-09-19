@@ -123,16 +123,6 @@ router.post('/removeFiles', function(req, res, next) {
 });
 
 
-/*
-router.post('/removeFiles', function(req, res, next) {
-    var name = req.query.filenames;
-    File.removeFile(name, function(err, result) {
-        if (err) return res.status(500).json({err: err.message});
-        res.json(result);
-    });
-});
-*/
-
 
 router.basicAuth = function(req, res, next) {
       var user = basicAuth(req);

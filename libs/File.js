@@ -211,8 +211,8 @@ File.parseExcelAndSave = function(_req, _name, _file, _user, fn) {
     });
 };
 
-File.findOneFile = function(query, fn) {
-    db.file.findOne(query, fn);
+File.findOneFile = function(query, projection, fn) {
+    db.file.findOne(query, projection, fn);
 };
 
 File.findFileAndUpdate= function(query, update, fn) {
@@ -229,8 +229,8 @@ File.requestEditFile = function(req, fn) {
 };
 
 
-File.findFiles = function(query, fn) {
-    db.file.find(query, fn);
+File.findFiles = function(query, projections, fn) {
+    db.file.find(query, projections, fn);
 };
 
 
@@ -238,7 +238,8 @@ File.filenameValidate = function(filename, fn) {
     File.findOneFile({
         name: filename,
         status: 'active'
-    }, function(err, file) {
+    }, {owner:0, CTime:0, MTime:0, MUser:0, path:0, Sheets:0, status:0, Rights:0, comments:0, locked:0},
+        function(err, file) {
         if (err) return fn(err);
         if (file) return fn(null, true);
         return fn(null, false);
@@ -250,7 +251,8 @@ File.validFilenamesAndLock = function(user, fn) {
     File.findFiles({
         'Rights.GroupRW' : user.group[0],
         status: 'active'
-    }, function(err, files) {
+    }, {owner:0, CTime:0, MTime:0, MUser:0, path:0, Sheets:0, status:0, Rights:0, comments:0},
+        function(err, files) {
         if (err) return fn(err);
         var retfiles = [];
         if (!files) return fn(null, retfiles);
