@@ -41,8 +41,10 @@ $(function() {
 
 
 
-var app = angular.module('AdminApp', ['ngRoute', 'ui.grid','ui.grid.resizeColumns','ui.grid.edit','ui.grid.exporter','ui.grid.pagination'])
-    .factory('Base64', ['$http', function($http) {
+var app = angular.module('AdminApp', ['ngRoute', 'ui.grid','ui.grid.resizeColumns',
+    'ui.grid.edit','ui.grid.exporter','ui.grid.pagination',
+    'navbar'
+]).factory('Base64', ['$http', function($http) {
         var keyStr = 'ABCDEFGHIJKLMNOP' +
             'QRSTUVWXYZabcdef' +
             'ghijklmnopqrstuv' +

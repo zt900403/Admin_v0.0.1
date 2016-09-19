@@ -1,14 +1,26 @@
 /**
  * Created by Lenovo on 2016/8/29.
  */
-angular.module('AdminApp').controller('NavbarCtrl', function ($rootScope, $scope, $http, $location, Base64, $timeout ) {
+
+angular.module('navbar').controller('NavbarCtrl', ['$rootScope', '$scope', '$http', '$location', 'Base64',
+    '$timeout','navbarInterface',
+    function ($rootScope, $scope, $http, $location, Base64, $timeout, navbarInterface ) {
+
+
     $scope.initMetisMenu = function() {
         $('#side-menu').metisMenu();
     };
 
+
+
     $scope.siderNavBarInit = function() {
-        if ($rootScope.me)
-            $scope.updateFilenames();
+        if ($rootScope.me) {
+            navbarInterface.setUserAndPasswd($rootScope.me.user, $rootScope.me.PWD);
+            navbarInterface.getfiles();
+            $scope.files = navbarInterface.files;
+
+        }
+
     };
 
     $scope.logout = function() {
@@ -32,30 +44,12 @@ angular.module('AdminApp').controller('NavbarCtrl', function ($rootScope, $scope
         }
     };
 
-    $scope.updateFilenames = function() {
-        $http({
-            url: '/Admin/api/auth/validFilenamesAndLock',
-            method: 'GET',
-            headers: {
-                Authorization: 'Basic '
-                + Base64.encode($rootScope.me.user + ':' + $rootScope.me.PWD)
-            }
-        }).success(function(result) {
-            $rootScope.files = result;
-        }).error(function(err) {
-            alert(err.err);
-        });
-    };
+
 
     $scope.loadFile = function(filename) {
         $timeout(function(){
-            $rootScope.$broadcast('loadFile', filename);
+            $rootScope.$emit('loadFile', filename);
         }, 0);
     };
 
-    $scope.$on('updateFilenames', function(event, args) {
-        $scope.updateFilenames();
-    });
-
-
-});
+}]);

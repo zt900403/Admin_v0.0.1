@@ -2,9 +2,11 @@
  * Created by Lenovo on 2016/8/29.
  */
 
-angular.module('AdminApp').controller('TableConfigCtrl', function ($rootScope, $scope, $http, Base64) {
+angular.module('AdminApp').controller('TableConfigCtrl', ['$rootScope', '$scope', '$http', 'Base64',
+    'navbarInterface',
+    function ($rootScope, $scope, $http, Base64, navbarInterface) {
 
-
+    $scope.filenames = navbarInterface.filenames;
     $scope.submit = function() {
         if ($scope.fileuploadChecked) {
             var fd = new FormData();
@@ -20,11 +22,11 @@ angular.module('AdminApp').controller('TableConfigCtrl', function ($rootScope, $
                 }
             }).success(function(result){
                 confirmDialog('成功',result.result);
-                $rootScope.$broadcast('updateFilenames', null);
+                navbarInterface.getfiles();
             }).error(function(result) {
                 confirmDialog('失败',result.err);
             }).finally(function() {
-                $rootScope.$broadcast('updateFilenames');
+                navbarInterface.getfiles();
             });
         } else {
             $http({
@@ -40,7 +42,7 @@ angular.module('AdminApp').controller('TableConfigCtrl', function ($rootScope, $
             }).error(function(err) {
                 errorDialog('失败',err.err);
             }).finally(function() {
-                $rootScope.$broadcast('updateFilenames');
+                navbarInterface.getfiles();
             });
         }
     };
@@ -81,9 +83,9 @@ angular.module('AdminApp').controller('TableConfigCtrl', function ($rootScope, $
                 }).error(function(err) {
 
                 }).finally(function() {
-                    $rootScope.$broadcast('updateFilenames');
+                    navbarInterface.getfiles();
                 });
             }
         });
     };
-});
+}]);

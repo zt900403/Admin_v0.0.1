@@ -2,7 +2,9 @@
  * Created by Lenovo on 2016/8/26.
  */
 
-angular.module('AdminApp').controller('TableCtrl', function ($rootScope, $scope, $http, $timeout, $q, Base64) {
+angular.module('AdminApp').controller('TableCtrl', ['$rootScope', '$scope', '$http', '$timeout', '$q', 'Base64',
+    'navbarInterface',
+    function ($rootScope, $scope, $http, $timeout, $q, Base64, navbarInterface) {
 
     $scope.editing = false;
 
@@ -99,8 +101,6 @@ angular.module('AdminApp').controller('TableCtrl', function ($rootScope, $scope,
 
 
     $scope.edit = function() {
-
-
         $http({
             url: '/Admin/api/auth/requestEditFile',
             method: 'POST',
@@ -122,7 +122,7 @@ angular.module('AdminApp').controller('TableCtrl', function ($rootScope, $scope,
             errorDialog('错误',err.err);
         }).then(function(){
             $scope.showSheet($scope.currentSheetname);
-            $rootScope.$broadcast('updateFilenames');
+            navbarInterface.getfiles();
         });
 
     };
@@ -173,7 +173,7 @@ angular.module('AdminApp').controller('TableCtrl', function ($rootScope, $scope,
             errorDialog('错误', err.err);
         }).finally(function() {
             $scope.showSheet($scope.currentSheetname);
-            $rootScope.$broadcast('updateFilenames');
+            navbarInterface.getfiles();
         });
 
     };
@@ -223,12 +223,11 @@ angular.module('AdminApp').controller('TableCtrl', function ($rootScope, $scope,
     };
 
 
-
-    $scope.$on('loadFile', function(event, args) {
+    var loadFile = function(filename) {
         $http({
             url: '/Admin/api/auth/getfileByName',
             method: 'GET',
-            params : {filename: args},
+            params : {filename: filename},
             headers: {
                 Authorization: 'Basic '
                 + Base64.encode($rootScope.me.user + ':' + $rootScope.me.PWD)
@@ -258,6 +257,9 @@ angular.module('AdminApp').controller('TableCtrl', function ($rootScope, $scope,
         }).error(function(err) {
             errorDialog('错误',err.err);
         });
+    };
+    $rootScope.$on('loadFile', function(event, args) {
+        loadFile(args);
     });
 
 
@@ -412,12 +414,12 @@ angular.module('AdminApp').controller('TableCtrl', function ($rootScope, $scope,
                 }).error(function(err) {
                     errorDialog('错误',err.err);
                 }).then(function(){
-                    $rootScope.$broadcast('updateFilenames');
+                    navbarInterface.getfiles();
                 });
             }
         });
     }
-});
+}]);
 
 
 

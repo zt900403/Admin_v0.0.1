@@ -49,7 +49,7 @@
                                 <div class="form-group">
                                     <label>选择要删除的报表</label>
                                     <select multiple ng-model="deleteFiles" class="form-control">
-                                        <option ng-repeat="file in $root.files">{{file.filename}}</option>
+                                        <option ng-repeat="filename in filenames">{{filename}}</option>
                                     </select>
                                 </div>
                                 <button type="submit" class="btn btn-success">删除</button>
