@@ -21,9 +21,11 @@ angular.module('AdminApp').controller('RegisterCtrl', function ($scope, $http, $
     $scope.register = function () {
 
         var user = $scope.user;
-
+        var match = user.user.match(/[^\x00-\xff]/ig);
         if (user.user.length < 4) {
             $scope.error('帐号长度小于4!');
+        } else if (match) {
+            $scope.error('含有中文或者全角字符!');
         } else if (user.PWD.length < 6) {
             $scope.error('密码长度小于6!');
         } else if (user.PWD !== user.PWD2) {
