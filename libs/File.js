@@ -241,7 +241,6 @@ File.validFilenamesAndLock = function(user, fn) {
         var retfiles = [];
         if (!files) return fn(null, retfiles);
         files.forEach(function(file) {
-
             retfiles.push({filename: file.name, locked: file.locked});
         });
         fn(null, retfiles);
@@ -287,6 +286,18 @@ File.removeFiles = function(filenames, fn) {
 File.removeFile = function(filename, fn) {
     db.file.remove({name: filename}, function(err) {
         fn(err);
+    });
+};
+
+File.getAllActiveFilenames = function(fn) {
+    db.file.find({}, {owner:0, CTime:0, MTime:0, MUser:0, path:0, Sheets:0, status:0, Rights:0, comments:0},
+    function(err, files) {
+        if (err) fn(err);
+        var result = [];
+        files.forEach(function(file) {
+            result.push(file.name);
+        });
+        fn(null, result);
     });
 };
 

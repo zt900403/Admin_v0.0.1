@@ -22,16 +22,28 @@ Role.createRole = function(rolename, fn) {
     role.fileReader = [];
     role.fileWriter = [];
     role.others = [];
-
-    var roleModel = new db.role(role);
-    roleModel.save(function(err) {
+    Role.findOneRole({name: rolename}, {}, function(err, one) {
         if (err) return fn(err);
-        fn();
+        if (one) return fn(new Error('角色名已存在!'));
+        var roleModel = new db.role(role);
+        roleModel.save(function(err) {
+            if (err) return fn(err);
+            fn();
+        });
     });
 };
 
+
 Role.findOneRole = function(query, projection, fn) {
     db.role.findOne(query, projection, fn);
+};
+
+Role.find = function(query, projection, fn) {
+    db.role.find(query, projection, fn);
+};
+
+Role.getAllRoles = function(fn) {
+    Role.find({}, {}, fn);
 };
 
 module.exports = Role;

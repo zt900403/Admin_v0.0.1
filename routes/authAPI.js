@@ -132,6 +132,20 @@ router.post('/createNewRole', function(req, res, next) {
     });
 });
 
+router.get('/getAllRoles', function(req, res, next) {
+    Role.getAllRoles(function(err, roles) {
+        if (err) return res.status(500).json({err: err.message});
+        return res.json(roles);
+    });
+});
+
+router.get('/getAllActiveFilenames', function(req, res, next) {
+   File.getAllActiveFilenames(function(err, filesnames) {
+       if (err) return res.status(500).json({err: '读取数据库错误!'});
+       res.json(filesnames);
+   });
+});
+
 router.basicAuth = function(req, res, next) {
       var user = basicAuth(req);
       if (!user || !user.name || !user.pass || user.pass == 'undefined') { //|| !req.session.uid) {

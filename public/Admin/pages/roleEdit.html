@@ -1,8 +1,7 @@
-<div id="page-wrapper" ng-controller="RoleEditCtrl">
+<div id="page-wrapper" >
 
     <div class="row" style="padding-top:20px">
-
-        <div class="col-lg-12">
+        <div class="col-lg-6">
         <div class="panel panel-default">
             <div class="panel-heading">
                 编辑角色
@@ -12,65 +11,33 @@
                     <div class="col-lg-12">
                         <form role="form"  ng-submit="editRoleSubmit()" ng-init="initChosen()">
 
-                            <div class="col-lg-6">
+
                                 <div class="form-group">
                                     <label>选择编辑角色</label>
                                     <select placeholder="选择一个要编辑的角色" required class="form-control" >
                                         <option value=""></option>
-                                        <option value="United States">United States</option>
-                                        <option value="United Kingdom">United Kingdom</option>
-                                        <option value="Afghanistan">Afghanistan</option>
-                                        <option value="Aland Islands">Aland Islands</option>
+                                        <option value="{{role.name}}" ng-repeat="role in Roles">{{role.name}}</option>
                                     </select>
                                 </div>
-                            </div>
 
-                            <div class="col-lg-2">
-                                <div class="form-group">
-                                    <label>保存修改</label>
-                                    <button type="submit" class="btn btn-success form-control">保存</button>
-                                </div>
-                            </div>
-
-                            <div class="col-lg-12">
                                 <div class="form-group">
                                     <label>文件读权限设置</label>
-                                    <select data-placeholder="选择可读的文件" class="chosen-select form-control" multiple >
+                                    <select data-placeholder="选择可读的文件" ng-model="fileReader" class="chosen-select form-control" multiple >
                                         <option value=""></option>
-                                        <option value="United States">United States</option>
-                                        <option value="United Kingdom">United Kingdom</option>
-                                        <option value="Afghanistan">Afghanistan</option>
-                                        <option value="Aland Islands">Aland Islands</option>
-                                        <option value="Albania">Albania</option>
-                                        <option value="Algeria">Algeria</option>
-                                        <option value="American Samoa">American Samoa</option>
-                                        <option value="Andorra">Andorra</option>
-                                        <option value="Angola">Angola</option>
-                                        <option value="Anguilla">Anguilla</option>
-                                        <option value="Antarctica">Antarctica</option>
+                                        <option value="{{filename}}" ng-repeat="filename in filenames">{{filename}}</option>
                                     </select>
                                 </div>
 
                                 <div class="form-group">
                                     <label>文件编辑权限设置</label>
-                                    <select data-placeholder="选择可编辑的文件" class="chosen-select form-control" multiple >
+                                    <select data-placeholder="选择可编辑的文件" ng-model="fileWriter" class="chosen-select form-control" multiple >
                                         <option value=""></option>
-                                        <option value="United States">United States</option>
-                                        <option value="United Kingdom">United Kingdom</option>
-                                        <option value="Afghanistan">Afghanistan</option>
-                                        <option value="Aland Islands">Aland Islands</option>
-                                        <option value="Albania">Albania</option>
-                                        <option value="Algeria">Algeria</option>
-                                        <option value="American Samoa">American Samoa</option>
-                                        <option value="Andorra">Andorra</option>
-                                        <option value="Angola">Angola</option>
-                                        <option value="Anguilla">Anguilla</option>
-                                        <option value="Antarctica">Antarctica</option>
+                                        <option value="{{filename}}" ng-repeat="filename in filenames">{{filename}}</option>
                                     </select>
                                 </div>
                                 <div class="form-group">
                                     <label>其他权限</label>
-                                    <select data-placeholder="其他权限设置" class="chosen-select form-control" multiple >
+                                    <select data-placeholder="其他权限设置" ng-model="others" class="chosen-select form-control" multiple >
                                         <option value="United States">United States</option>
                                         <option value="United Kingdom">United Kingdom</option>
                                         <option value="Afghanistan">Afghanistan</option>
@@ -78,6 +45,37 @@
                                         <option value="Albania">Albania</option>
 
                                     </select>
+                                </div>
+
+
+                                <button type="submit" class="btn btn-success form-control">保存</button>
+
+                        </form>
+                    </div>
+
+                </div>
+                <!-- /.row (nested) -->
+            </div>
+            <!-- /.panel-body -->
+        </div>
+        </div>
+        <!-- /.panel -->
+        <div class="col-lg-6">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                新建角色
+            </div>
+            <div class="panel-body">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <form role="newRoleForm"  ng-submit="createNewRoleSubmit()">
+                            <div class="form-group">
+                                <label>新建角色</label>
+                                <div class="input-group">
+                                    <input type="text" required class="form-control"  ng-model="newRolename" placeholder="角色名">
+                                    <span class="input-group-btn">
+                                            <button type="submit" class="btn btn-success">提交</button>
+                                        </span>
                                 </div>
                             </div>
                         </form>
@@ -87,40 +85,8 @@
             </div>
             <!-- /.panel-body -->
         </div>
-        <!-- /.panel -->
         </div>
-
     </div>
-    <div class="row" style="padding-top:20px">
-
-        <div class="col-lg-6">
-            <div class="panel panel-default">
-                <div class="panel-heading">
-                    新建角色
-                </div>
-                <div class="panel-body">
-                    <div class="row">
-                        <div class="col-lg-12">
-                            <form role="newRoleForm"  ng-submit="createNewRoleSubmit()">
-                                <div class="form-group">
-                                    <label>新建角色</label>
-                                    <div class="input-group">
-                                        <input type="text" required class="form-control"  ng-model="newRolename" placeholder="角色名">
-                                        <span class="input-group-btn">
-                                            <button type="submit" class="btn btn-success">提交</button>
-                                        </span>
-                                    </div>
-                                </div>
-                            </form>
-                        </div>
-                    </div>
-                    <!-- /.row (nested) -->
-                </div>
-                <!-- /.panel-body -->
-            </div>
-            <!-- /.panel -->
-        </div>
-
-    </div>
+    <!-- /.panel -->
 </div>
 <!-- /#page-wrapper -->

@@ -178,3 +178,28 @@ app.directive('fileModel', ['$parse', function ($parse) {
         }
     };
 }]);
+
+
+
+app.factory('Dialog', [function() {
+    return {
+        confirmDialog : function(title, msg, fn) {
+            BootstrapDialog.confirm({
+                title: title,
+                message: msg,
+                btnCancelLabel: '取消',
+                btnOKLabel: '确认',
+                callback: fn
+            });
+        },
+        errorDialog : function(title, msg, fn) {
+            BootstrapDialog.confirm({
+                title: title,
+                type: BootstrapDialog.TYPE_DANGER,
+                message: msg,
+                btnCancelLabel: '关闭',
+                callback: fn
+            });
+        }
+    };
+}]);

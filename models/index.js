@@ -38,4 +38,11 @@ exports.file.prototype.toJSON = function() {
 };
 
 exports.role = mongoose.model('role', require('./role'));
-
+exports.role.prototype.toJSON = function() {
+    return {
+        name: this.name,
+        fileReader: this.fileReader,
+        fileWriter: this.fileWriter,
+        others: this.others
+    }
+};
