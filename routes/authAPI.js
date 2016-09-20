@@ -4,6 +4,7 @@
 var express = require('express');
 var User = require('../libs/User');
 var File = require('../libs/File');
+var Role = require('../libs/Role');
 var basicAuth = require('basic-auth');
 
 var multiparty = require('multiparty');
@@ -122,7 +123,14 @@ router.post('/removeFiles', function(req, res, next) {
     });
 });
 
-
+router.post('/createNewRole', function(req, res, next) {
+    var rolename = req.query.rolename;
+    if (!rolename) return res.status(401).json({err: '无效参数'});
+    Role.createRole(rolename, function(err) {
+        if (err) return res.status(500).json({err: err.message});
+        res.json({result: "创建新角色成功!"});
+    });
+});
 
 router.basicAuth = function(req, res, next) {
       var user = basicAuth(req);

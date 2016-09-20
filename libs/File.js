@@ -9,7 +9,7 @@ var XLSX = require('xlsx');
 var async = require('async');
 
 function File(obj) {
-    this.File = obj;
+    this.file = obj;
 }
 
 
@@ -172,22 +172,6 @@ File.parseExcelAndSave = function(_req, _name, _file, _user, fn) {
                     sheetColDefs.push({field: tmp,
                         width: maxWidthdict[tmp] ? maxWidthdict[tmp] * 20 : 20
                         });
-                    /*
-                    var len = tmp.length;
-                    if (tmp == 'Z'.repeat(len)) {
-                        tmp = 'A'.repeat(len+1);
-                    } else if (len == 1) {
-                        tmp = File.nextChar(tmp[0]);
-                    } else {
-                        for (var i = len - 1; i != 0; --i) {
-                            tmp = File.StringReplaceAt(tmp, i, File.nextChar(tmp[0]));
-                            if (tmp[i] == '[') {                // '[' == 'Z'.charCodeAt(0) + 1
-                                tmp = File.StringReplaceAt(tmp, i-1, File.nextChar(tmp[0]));
-                                tmp = File.StringReplaceAt(tmp, i, 'A');
-                            }
-                        }
-                    }
-                    */
                     tmp = File.CharIncrement(tmp);
                 }
                 //have valid data

@@ -37,4 +37,5 @@ exports.file.prototype.toJSON = function() {
     }
 };
 
+exports.role = mongoose.model('role', require('./role'));
 

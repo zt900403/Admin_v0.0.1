@@ -17,6 +17,10 @@ angular.module('AdminApp').config(function($routeProvider) {
         templateUrl: '/Admin/pages/tableConfig.html',
         controller: 'TableConfigCtrl'
     }).
+    when('/roleEdit', {
+        templateUrl: '/Admin/pages/roleEdit.html',
+        controller: 'RoleEditCtrl'
+    }).
     otherwise({
         redirectTo: '/login'
     });
