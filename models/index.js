@@ -18,7 +18,10 @@ exports.user.prototype.toJSON = function() {
         mobile: this.mobile,
         email: this.email,
         department: this.department,
-        role: this.role
+        role: this.role,
+        fileReader: this.fileReader,
+        fileWriter: this.fileWriter,
+        others: this.others
     }
 
 };

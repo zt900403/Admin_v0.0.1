@@ -84,11 +84,32 @@ User.updateUser = function(user, fn) {
     db.user.findOneAndUpdate({user: user.user}, user, fn);
 };
 
-User.findUserRightsByRole = function(user, fn) {
-    db.role.find({name: {$or:[user.role, user.group]}}, function(roles) {
-        if (roles.length >= 2) {
-            
+User.arrayUnique = function(array) {
+    var a = array.concat();
+    for(var i=0; i<a.length; ++i) {
+        for(var j=i+1; j<a.length; ++j) {
+            if(a[i] === a[j])
+                a.splice(j--, 1);
         }
+    }
+    return a;
+};
+
+
+User.findUserRightsByRole = function(user, fn) {
+    db.role.find({name: {$in: [user.role, user.group]}}, function(err, roles) {
+        if (err) return fn(err);
+        var result = {};
+        if (Array.isArray(roles) && roles.length >= 2) {
+            result.fileReader = User.arrayUnique(roles[0].fileReader.concat(roles[1].fileReader));
+            result.fileWriter = User.arrayUnique(roles[0].fileWriter.concat(roles[1].fileWriter));
+            result.others = User.arrayUnique(roles[0].others.concat(roles[1].others));
+        } else {
+            result.fileReader = roles[0].fileReader;
+            result.fileWriter = roles[0].fileWriter;
+            result.others = roles[0].others;
+        }
+        fn(null, result);
     });
 };
 

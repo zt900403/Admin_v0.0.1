@@ -19,10 +19,16 @@ router.get('/validate', function(req, res, next) {
                             }
             });
 
-            res.format({
-                json: function() {
-                    res.json(one);
+            User.findUserRightsByRole(one, function(err, rights) {
+                if (err) return res.status(500).json({err: err.message});
+                for (var prop in rights) {
+                    one[prop] = rights[prop];
                 }
+                res.format({
+                    json: function() {
+                        res.json(one);
+                    }
+                });
             });
         });
 
@@ -121,13 +127,18 @@ router.post('/login', function(req, res, next) {
                 }
             });
         }
-
-        req.session.uid = one.id;
-
-        return res.format({
-            json: function() {
-                 res.json(one);
+        User.findUserRightsByRole(one, function(err, rights) {
+            if (err) return res.status(500).json({err: err.message});
+            for (var prop in rights) {
+                one[prop] = rights[prop];
             }
+            req.session.uid = one.id;
+
+            return res.format({
+                json: function() {
+                    res.json(one);
+                }
+            });
         });
     });
 });
