@@ -20,6 +20,9 @@ angular.module('AdminApp').config(function($routeProvider) {
     when('/roleEdit', {
         templateUrl: '/Admin/pages/roleEdit.html',
         controller: 'RoleEditCtrl'
+    }).when('/usersAuth',{
+        templateUrl: '/Admin/pages/usersAuth.html',
+        controller: 'UsersAuthCtrl'
     }).
     otherwise({
         redirectTo: '/login'

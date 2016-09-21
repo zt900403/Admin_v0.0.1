@@ -123,6 +123,7 @@ router.post('/login', function(req, res, next) {
         }
 
         req.session.uid = one.id;
+
         return res.format({
             json: function() {
                  res.json(one);

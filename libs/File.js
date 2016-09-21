@@ -205,7 +205,8 @@ File.findFileAndUpdate= function(query, update, fn) {
 
 
 File.requestEditFile = function(req, fn) {
-    File.findFileAndUpdate({name: req.query.filename, status: 'active', locked: 'unlocked'}, {locked: req.user.user}, function(err, file) {
+    File.findFileAndUpdate({name: req.query.filename, status: 'active', locked: 'unlocked'},
+        {locked: req.user.user}, function(err, file) {
         if (err) return fn(err);
         if (!file) return fn(new Error('请求文件无效!'));
         return fn(null, file);

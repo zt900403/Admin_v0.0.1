@@ -5,37 +5,21 @@ angular.module('AdminApp').controller('RoleEditCtrl', ['$rootScope', '$scope','$
 
     function ($rootScope, $scope, $http, $timeout, Base64, Dialog) {
 
-    var initChosen = function() {
-        $('.chosen-select').chosen({width: "100%"});
-    };
 
-    var getAllRoles = function() {
+
+    var getRolesOthersAndFilenames = function() {
         $http({
-            url: '/Admin/api/auth/getAllRoles',
+            url: '/Admin/api/auth/getRolesOthersAndFilenames',
             method: 'GET',
             headers: {
                 Authorization: 'Basic '
                 + Base64.encode($rootScope.me.user + ':' + $rootScope.me.PWD)
             }
-        }).success(function(roles) {
-            $scope.Roles = roles;
-        }).error(function(err) {
-            Dialog.errorDialog('失败', err.err);
-        });
-    };
-    var getAllActiveFilenames = function() {
-        $http({
-            url: '/Admin/api/auth/getAllActiveFilenames',
-            method: 'GET',
-            headers: {
-                Authorization: 'Basic '
-                + Base64.encode($rootScope.me.user + ':' + $rootScope.me.PWD)
-            }
-        }).success(function(filenames) {
-            $scope.filenames = filenames;
-            $timeout(function() {
-                initChosen();
-            }, 0);
+        }).success(function(result) {
+            $scope.Roles = result.roles;
+            $scope.filenames = result.filenames;
+            $scope.othersTemplate = result.others;
+
         }).error(function(err) {
             Dialog.errorDialog('失败', err.err);
         });
@@ -43,7 +27,7 @@ angular.module('AdminApp').controller('RoleEditCtrl', ['$rootScope', '$scope','$
 
 
 
-        $scope.createNewRoleSubmit = function() {
+    $scope.createNewRoleSubmit = function() {
         $http({
             url: '/Admin/api/auth/createNewRole',
             method: 'POST',
@@ -54,16 +38,60 @@ angular.module('AdminApp').controller('RoleEditCtrl', ['$rootScope', '$scope','$
             }
         }).success(function(result) {
             Dialog.confirmDialog('成功', result.result);
+            getRolesOthersAndFilenames();
         }).error(function(err) {
             Dialog.errorDialog('失败', err.err);
         });
     };
 
-    $scope.editRoleSubmit = function() {
-        alert('editRole');
+    var getRolebyName = function(name) {
+        var result;
+        $scope.Roles.forEach(function(role) {
+           if (role.name === name) {
+               result = role;
+           }
+        });
+        return result;
     };
 
-    getAllActiveFilenames();
-    getAllRoles();
+    $scope.saveRoleSubmit = function() {
+        var role = {};
+        role.name = $scope.selectedRolename;
+        role.fileReader = $scope.fileReader;
+        role.fileWriter = $scope.fileWriter;
+        role.others = $scope.others;
+        var fd = new FormData();
+
+        fd.append('role', JSON.stringify(role));
+
+        $http.post('/Admin/api/auth/saveRole', fd, {
+            transformRequest: angular.identity,
+            headers: {
+                'Content-Type': undefined,
+                'Authorization': 'Basic '
+                + Base64.encode($rootScope.me.user + ':' + $rootScope.me.PWD)
+            }
+        }).success(function(result) {
+            Dialog.confirmDialog('成功', result.result);
+            getRolesOthersAndFilenames();
+        }).error(function(err) {
+            Dialog.errorDialog('失败', err.err);
+        });
+    };
+
+    $scope.selectRole = function() {
+        var role = getRolebyName($scope.selectedRolename);
+        $scope.fileReader = role.fileReader;
+        $scope.fileWriter = role.fileWriter;
+        $scope.others = role.others;
+
+    };
+
+    $scope.isSelected = function(element, array) {
+        var a = array.indexOf(element);
+        return a !== -1;
+    };
+
+    getRolesOthersAndFilenames();
 }]);
 //end of file

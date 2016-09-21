@@ -46,5 +46,12 @@ Role.getAllRoles = function(fn) {
     Role.find({}, {}, fn);
 };
 
+Role.findOneAndUpdate = function(query, update, fn) {
+    db.role.findOneAndUpdate(query, update, fn);
+};
+
+Role.removeRolesFile = function(filenames, fn) {
+    db.role.update({},{$pull: {fileReader:{$in: filenames}, fileWriter: {$in: filenames}}},{multi: true}, fn);
+};
 module.exports = Role;
 //end of file

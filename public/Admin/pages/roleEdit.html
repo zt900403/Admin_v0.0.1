@@ -9,41 +9,34 @@
             <div class="panel-body">
                 <div class="row">
                     <div class="col-lg-12">
-                        <form role="form"  ng-submit="editRoleSubmit()" ng-init="initChosen()">
+                        <form role="form"  ng-submit="saveRoleSubmit()" >
 
 
                                 <div class="form-group">
                                     <label>选择编辑角色</label>
-                                    <select placeholder="选择一个要编辑的角色" required class="form-control" >
+                                    <select placeholder="选择一个要编辑的角色" ng-model="selectedRolename" ng-change="selectRole()" required class="form-control" >
                                         <option value=""></option>
-                                        <option value="{{role.name}}" ng-repeat="role in Roles">{{role.name}}</option>
+                                        <option value="{{role.name}}"  ng-repeat="role in Roles">{{role.name}}</option>
                                     </select>
                                 </div>
 
                                 <div class="form-group">
                                     <label>文件读权限设置</label>
-                                    <select data-placeholder="选择可读的文件" ng-model="fileReader" class="chosen-select form-control" multiple >
-                                        <option value=""></option>
-                                        <option value="{{filename}}" ng-repeat="filename in filenames">{{filename}}</option>
+                                    <select chosen placeholder-text-multiple="'选择可读的文件'" multiple class="form-control" ng-model="fileReader"
+                                            ng-options="filename for filename in filenames" >
                                     </select>
                                 </div>
 
                                 <div class="form-group">
                                     <label>文件编辑权限设置</label>
-                                    <select data-placeholder="选择可编辑的文件" ng-model="fileWriter" class="chosen-select form-control" multiple >
-                                        <option value=""></option>
-                                        <option value="{{filename}}" ng-repeat="filename in filenames">{{filename}}</option>
+                                    <select chosen placeholder-text-multiple="'选择可编辑的文件'" multiple class="form-control" ng-model="fileWriter"
+                                            ng-options="filename for filename in filenames" >
                                     </select>
                                 </div>
                                 <div class="form-group">
                                     <label>其他权限</label>
-                                    <select data-placeholder="其他权限设置" ng-model="others" class="chosen-select form-control" multiple >
-                                        <option value="United States">United States</option>
-                                        <option value="United Kingdom">United Kingdom</option>
-                                        <option value="Afghanistan">Afghanistan</option>
-                                        <option value="Aland Islands">Aland Islands</option>
-                                        <option value="Albania">Albania</option>
-
+                                    <select chosen placeholder-text-multiple="'其他权限'" multiple class="form-control" ng-model="others"
+                                            ng-options="other for other in othersTemplate" >
                                     </select>
                                 </div>
 

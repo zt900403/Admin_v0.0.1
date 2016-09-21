@@ -76,6 +76,22 @@ User.logoutById = function(id, fn) {
     });
 };
 
+User.getAllUsersRole = function(fn) {
+    db.user.find({}, {user: 1, role: 1, group: 1, _id: 0}, fn);
+};
+
+User.updateUser = function(user, fn) {
+    db.user.findOneAndUpdate({user: user.user}, user, fn);
+};
+
+User.findUserRightsByRole = function(user, fn) {
+    db.role.find({name: {$or:[user.role, user.group]}}, function(roles) {
+        if (roles.length >= 2) {
+            
+        }
+    });
+};
+
 User.authenticate = function(name, pass, fn){
     User.findUserByUser(name, function(err, user){
         if (err) return fn(err);

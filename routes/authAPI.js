@@ -119,7 +119,10 @@ router.post('/removeFiles', function(req, res, next) {
     }
     File.removeFiles(filenames, function(err, result) {
         if (err) return res.status(500).json({err: err.message});
-        res.json(result);
+        Role.removeRolesFile(filenames, function(err) {
+            if (err) return res.status(500).json({err: err.message});
+            res.json(result);
+        });
     });
 });
 
@@ -132,19 +135,64 @@ router.post('/createNewRole', function(req, res, next) {
     });
 });
 
-router.get('/getAllRoles', function(req, res, next) {
+
+router.get('/getRolesOthersAndFilenames', function(req, res, next) {
+    var result = {};
     Role.getAllRoles(function(err, roles) {
         if (err) return res.status(500).json({err: err.message});
-        return res.json(roles);
+        result.roles = roles;
+        File.getAllActiveFilenames(function(err, filesnames) {
+            if (err) return res.status(500).json({err: '读取数据库错误!'});
+            result.filenames = filesnames;
+            result.others = ['createFile', 'deleteFile', 'createWorkOrder', 'handleWorkOrder',
+                'RoleEditAndAuth'];
+            res.json(result);
+        });
     });
 });
 
-router.get('/getAllActiveFilenames', function(req, res, next) {
-   File.getAllActiveFilenames(function(err, filesnames) {
-       if (err) return res.status(500).json({err: '读取数据库错误!'});
-       res.json(filesnames);
-   });
+router.post('/saveRole', function(req, res, next) {
+    var form = new multiparty.Form();
+    form.parse(req, function(err, fields, files) {
+        if (err) return res.status(500).json({err: '解析表单失败!'});
+        if (!fields.role) return res.status(400).json({err: '无效的输入参数!'});
+        var role = JSON.parse(fields.role[0]);
+        Role.findOneAndUpdate({name: role.name}, role, function(err) {
+            if (err) return res.status(500).json({err: err.message});
+            res.json({result: '保存成功!'});
+        });
+    });
 });
+
+router.get('/getAllUsersAndRoles', function(req, res, next) {
+    User.getAllUsersRole(function(err, users) {
+        if (err) return res.status(500).json({err: err.message});
+        Role.getAllRoles(function(err, roles) {
+            var result = {};
+            result.rolesname = [];
+            roles.forEach(function(role) {
+                result.rolesname.push(role.name);
+            });
+
+            result.users = users;
+            res.json(result);
+        });
+    });
+});
+
+router.post('/updateUser', function(req, res, next) {
+    var form = new multiparty.Form();
+    form.parse(req, function(err, fields, files) {
+        if (err) return res.status(500).json({err: '解析表单失败!'});
+        if (!fields.user) return res.status(400).json({err: '无效的输入参数!'});
+        var user = JSON.parse(fields.user[0]);
+        User.updateUser(user, function(err, one) {
+            if (err) return res.status(500).json({err: err.message});
+            res.json({result: '保存成功!'});
+        });
+    });
+});
+
 
 router.basicAuth = function(req, res, next) {
       var user = basicAuth(req);

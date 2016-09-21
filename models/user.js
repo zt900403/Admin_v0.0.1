@@ -34,10 +34,6 @@ var userSchema = new Schema({
     },
     LLTime: Date,               //Last login time
     files: [String],			//the files of you create
-    filesRights:{
-        RW: [String],
-        M: [String]             //modify the file rights
-    },
     name: String,
     tele: String,
     Mobile: Number,
@@ -47,21 +43,13 @@ var userSchema = new Schema({
         type: Boolean,
         default: false
     },
-    group: {
-        type: [String]
-    },
-    role: {
-        type: String,
-        default: 'normal'            //admin,normal,inactive
-    }
-
+    group: String,
+    role: String
 },{
     versionKey: false           // You should be aware of the outcome after set to false
 });
 
 userSchema.pre("save",function(next) {
-    if (this.group.length == 0)
-        this.group.push("default");
 
     this.LLTime = Date.now();
 
