@@ -13,31 +13,32 @@
                 <div id="editPanel" class="panel-heading collapse" ng-if="file.MTime" >
                     <p>最后修改时间:&emsp;{{ str2date(file.MTime) }}&emsp;	by:&nbsp; {{file.MUser}}&emsp;&emsp;	文件锁所有人:&emsp;{{file.locked}}</p>
 
-                    <div class="btn-group btn-space">
-                        <button type="button" class="btn btn-primary" ng-click="edit()" ng-if="!editing"><i class="fa fa-pencil-square-o"></i>编辑</button>
-                        <button type="button" class="btn btn-primary" ng-click="save()" ng-if="editing"><i class="fa fa-floppy-o"></i>保存</button>
-                        <button type="button" class="btn btn-default" ng-click="cancelEditFile()" ng-if="editing"><i class="fa fa-reply"></i>取消编辑</button>
-                    </div>
+                    <div ng-show="$root.me.fileWriter.includes(file.name)" >
+                        <div class="btn-group btn-space">
+                            <button type="button" class="btn btn-primary" ng-click="edit()" ng-if="!editing"><i class="fa fa-pencil-square-o"></i>编辑</button>
+                            <button type="button" class="btn btn-primary" ng-click="save()" ng-if="editing"><i class="fa fa-floppy-o"></i>保存</button>
+                            <button type="button" class="btn btn-default" ng-click="cancelEditFile()" ng-if="editing"><i class="fa fa-reply"></i>取消编辑</button>
+                        </div>
 
 
-                    <div class="btn-group btn-space ">
-                        <button type="button" class="btn btn-primary btn-sm" ng-if="editing" ng-click="addColumn()"><i class="fa fa-plus"></i></button>
-                        <button type="button" class="btn btn-primary btn-sm disabled" ng-if="editing">列</button>
-                        <button type="button" class="btn btn-primary btn-sm" ng-if="editing" ng-click="removeColumn()"><i class="fa fa-minus"></i></button>
-                    </div>
+                        <div class="btn-group btn-space ">
+                            <button type="button" class="btn btn-primary btn-sm" ng-if="editing" ng-click="addColumn()"><i class="fa fa-plus"></i></button>
+                            <button type="button" class="btn btn-primary btn-sm disabled" ng-if="editing">列</button>
+                            <button type="button" class="btn btn-primary btn-sm" ng-if="editing" ng-click="removeColumn()"><i class="fa fa-minus"></i></button>
+                        </div>
 
-                    <div class="btn-group btn-space">
-                        <button type="button" class="btn btn-primary btn-sm" ng-if="editing" ng-click="addRow()"><i class="fa fa-plus"></i></button>
-                        <button type="button" class="btn btn-primary btn-sm disabled" ng-if="editing">行</button>
-                        <button type="button" class="btn btn-primary btn-sm" ng-if="editing" ng-click="removeRow()"><i class="fa fa-minus"></i></button>
+                        <div class="btn-group btn-space">
+                            <button type="button" class="btn btn-primary btn-sm" ng-if="editing" ng-click="addRow()"><i class="fa fa-plus"></i></button>
+                            <button type="button" class="btn btn-primary btn-sm disabled" ng-if="editing">行</button>
+                            <button type="button" class="btn btn-primary btn-sm" ng-if="editing" ng-click="removeRow()"><i class="fa fa-minus"></i></button>
+                        </div>
+                        <!--
+                        <div class="btn-group btn-space">
+                            <div ng-include="'./pages/elements/messagebox.html'"></div>
+                        </div>
+                        -->
+                        <button type="button" class="btn btn-danger pull-right" ng-if="editing" ng-click="removeCurrentSheet()"><i class="fa fa-trash-o"></i>删除此分页</button>
                     </div>
-                    <!--
-                    <div class="btn-group btn-space">
-                        <div ng-include="'./pages/elements/messagebox.html'"></div>
-                    </div>
-                    -->
-                    <button type="button" class="btn btn-danger pull-right" ng-if="editing" ng-click="removeCurrentSheet()"><i class="fa fa-trash-o"></i>删除此分页</button>
-
                 </div>
 
 

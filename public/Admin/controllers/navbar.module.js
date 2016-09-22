@@ -3,7 +3,7 @@
  */
 angular.
     module('navbar', ['AdminApp']).
-    service('navbarInterface', ['$http', 'Base64', function($http, Base64) {
+    service('navbarInterface', ['$rootScope', '$http', 'Base64', function($rootScope, $http, Base64) {
         var filenames = [];
         var files = [];
         var username;
@@ -18,6 +18,7 @@ angular.
             $http({
                 url: '/Admin/api/auth/validFilenamesAndLock',
                 method: 'GET',
+                params : {filenames: $rootScope.me.fileReader},
                 headers: {
                     Authorization: 'Basic '
                     + Base64.encode(username + ':' + passwd)

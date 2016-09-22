@@ -56,7 +56,7 @@ router.post('/createBlankFile', function(req, res, next) {
 
 
 router.get('/validFilenamesAndLock', function(req, res, next) {
-    File.validFilenamesAndLock(req.user, function(err, files) {
+    File.validFilenamesAndLock(req.query.filenames, function(err, files) {
         if (err) return res.status(500).json({err: err.message});
         res.json(files);
     });

@@ -231,9 +231,8 @@ File.filenameValidate = function(filename, fn) {
     });
 };
 
-File.validFilenamesAndLock = function(user, fn) {
-    if (user.group.length == 0) return fn(new Error('用户未分组!'));
-    File.findFiles({
+File.validFilenamesAndLock = function(filenames, fn) {
+    File.findFiles({name: {$in: filenames},
         status: 'active'
     }, {owner:0, CTime:0, MTime:0, MUser:0, path:0, Sheets:0, status:0, Rights:0, comments:0},
         function(err, files) {

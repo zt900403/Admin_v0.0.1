@@ -269,7 +269,7 @@ angular.module('AdminApp').controller('TableCtrl', ['$rootScope', '$scope', '$ht
         return null;
     };
 
-    CharIncrement = function(char) {
+    var CharIncrement = function(char) {
         var len = char.length;
         if (char == 'Z'.repeat(len)) {
             return 'A'.repeat(len+1);
@@ -418,7 +418,9 @@ angular.module('AdminApp').controller('TableCtrl', ['$rootScope', '$scope', '$ht
                 });
             }
         });
-    }
+    };
+
+
 }]);
 
 

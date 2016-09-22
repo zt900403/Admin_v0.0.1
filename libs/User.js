@@ -99,6 +99,7 @@ User.arrayUnique = function(array) {
 User.findUserRightsByRole = function(user, fn) {
     db.role.find({name: {$in: [user.role, user.group]}}, function(err, roles) {
         if (err) return fn(err);
+        if (roles.length == 0) return fn();
         var result = {};
         if (Array.isArray(roles) && roles.length >= 2) {
             result.fileReader = User.arrayUnique(roles[0].fileReader.concat(roles[1].fileReader));
