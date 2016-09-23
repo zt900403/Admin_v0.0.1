@@ -24,6 +24,10 @@ angular.module('AdminApp').config(function($routeProvider) {
         templateUrl: '/Admin/pages/usersAuth.html',
         controller: 'UsersAuthCtrl'
     }).
+    when('/workOrderCenter', {
+        templateUrl: '/Admin/pages/workOrderCenter.html',
+        controller: 'WorkOrderCenter'
+    }).
     otherwise({
         redirectTo: '/login'
     });
