@@ -49,3 +49,23 @@ exports.role.prototype.toJSON = function() {
         others: this.others
     }
 };
+
+
+exports.workOrder = mongoose.model('workOrder', require('./workOrder'));
+exports.workOrder.prototype.toJSON = function() {
+    return {
+        id: this.id,
+        title: this.title,
+        content: this.content,
+        initiator: this.initiator,
+        acceptor: this.acceptor,
+        priority: this.priority,
+        category: this.category,
+        version: this.version,
+        status: this.status,
+        CTime: this.CTime,
+        MTime: this.MTime,
+        history: this.history,
+        relevantPeople: this.relevantPeople
+    }
+};

@@ -49,12 +49,6 @@ var userSchema = new Schema({
     versionKey: false           // You should be aware of the outcome after set to false
 });
 
-userSchema.pre("save",function(next) {
-
-    this.LLTime = Date.now();
-
-    next();
-});
 
 
 

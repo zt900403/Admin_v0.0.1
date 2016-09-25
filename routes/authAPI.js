@@ -5,6 +5,7 @@ var express = require('express');
 var User = require('../libs/User');
 var File = require('../libs/File');
 var Role = require('../libs/Role');
+var WorkOrder = require('../libs/WorkOrder');
 var basicAuth = require('basic-auth');
 
 var multiparty = require('multiparty');
@@ -193,6 +194,69 @@ router.post('/updateUser', function(req, res, next) {
     });
 });
 
+
+router.post('/createWorkOrder', function(req, res, next) {
+    var form = new multiparty.Form();
+    form.parse(req, function(err, fields, files) {
+        if (err) return res.status(500).json({err: '解析表单失败!'});
+        if (!fields.workOrder) return res.status(400).json({err: '无效的输入参数!'});
+        var workorder = JSON.parse(fields.workOrder[0]);
+        new WorkOrder(workorder).save(function(err) {
+            if (err) return res.status(500).json({err: err.message});
+            res.json({result: '保存成功!'});
+        });
+    });
+});
+
+router.get('/getAllMyAcceptWorkOrder', function(req, res, next) {
+    WorkOrder.getAllMyAcceptWorkOrder(req.user.user, req.user.group, function(err, orders) {
+        if (err) return res.status(400).json({err: err.message});
+        res.json(orders);
+    });
+});
+
+router.get('/getAllMyAcceptWorkOrder', function(req, res, next) {
+    WorkOrder.getAllMyAcceptWorkOrder(req.user.user, req.user.group, function(err, orders) {
+        if (err) return res.status(400).json({err: err.message});
+        res.json(orders);
+    });
+});
+
+router.get('/getAllMyPublishWorkOrder', function(req, res, next) {
+    WorkOrder.getAllMyPublishWorkOrder(req.user.user, function(err, orders) {
+        if (err) return res.status(400).json({err: err.message});
+        res.json(orders);
+    });
+});
+
+router.get('/getAllMyProcessedWorkOrder', function(req, res, next) {
+    WorkOrder.getAllMyProcessedWorkOrder(req.user.user, function(err, orders) {
+        if (err) return res.status(400).json({err: err.message});
+        res.json(orders);
+    });
+});
+
+
+router.post('/updateWorkOrder', function(req, res, next) {
+    var form = new multiparty.Form();
+    form.parse(req, function(err, fields, files) {
+        if (err) return res.status(500).json({err: '解析表单失败!'});
+        if (!fields.workorder) return res.status(400).json({err: '无效的输入参数!'});
+        var workorder = JSON.parse(fields.workorder[0]);
+        WorkOrder.findOne({version: workorder.version}, {version:1}, function(err, result) {
+            if (err) return res.status(400).json({err: err.message});
+            if (!result || workorder.version !== result.version) {
+                res.status(400).json({err: '工单已被别人处理,请刷新页面!'});
+            }
+            workorder.MTime = Date.now();
+            workorder.version++;
+            WorkOrder.findOneAndUpdate({id: workorder.id}, workorder, function(err) {
+                if (err) return res.status(400).json({err: err.message});
+                res.json({result: '提交成功!'});
+            });
+        });
+    });
+});
 
 router.basicAuth = function(req, res, next) {
       var user = basicAuth(req);

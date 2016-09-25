@@ -55,7 +55,7 @@ User.UpdateById = function(id, update, fn) {
 };
 
 User.loginByUser = function(user, fn) {
-    this.findOneAndUpdateByUser(user.user, {online: true}, function(err, one) {
+    this.findOneAndUpdateByUser(user.user, {LLTime: Date.now(),online: true}, function(err, one) {
         if (err) return fn(new Error('读数据库异常!'));
         if (!one) return fn(new Error('用户名不存在!'));
         bcrypt.hash(user.PWD, one.salt, function(err, hash) {

@@ -43,7 +43,7 @@ $(function() {
 
 var app = angular.module('AdminApp', ['ngRoute', 'ui.grid','ui.grid.resizeColumns',
     'ui.grid.edit','ui.grid.exporter','ui.grid.pagination',
-    'navbar', 'localytics.directives'
+    'navbar', 'localytics.directives', 'workorderDetail',
 ]).factory('Base64', ['$http', function($http) {
         var keyStr = 'ABCDEFGHIJKLMNOP' +
             'QRSTUVWXYZabcdef' +
