@@ -50,7 +50,8 @@ angular.
 
 
             $scope.hostSelected = function() {
-                  getHostInfo($scope.selectedHostIP);
+                myHostsChart = echarts.init(document.getElementById('host'));
+                getHostInfo($scope.selectedHostIP);
             };
 
             var getHostInfo = function(ip) {
@@ -74,6 +75,7 @@ angular.
             };
 
             var updateHostChart = function(chart, chartData) {
+
                 var legend = function() {
                     var data = [];
                     if (Array.isArray(chartData.disk) && (chartData.disk.length !== 0)) {
@@ -248,17 +250,13 @@ angular.
 
 
 
-            var updateDBChart = function(chart, chartData, dataname) {
+            var updateDBChart = function(chart, chartData, dbinstname) {
                 var legend = function() {
                     var data = [];
-                    if (Array.isArray(chartData.TableSpace)
-                        && (chartData.TableSpace.length !== 0)) {
-                        for (var prop in chartData.TableSpace[0]) {
-                            if (prop !== 'timestamp') {
-                                data.push(prop);
-                            }
-                        }
-                    }
+                    data.push('总大小(GB)');
+                    data.push('已使用(GB)');
+                    data.push('使用率(%)');
+                    data.push('空闲(GB)');
                     return data;
                 }();
 
@@ -296,15 +294,23 @@ angular.
 
                     chartData.TableSpace.forEach(function(item) {
                         for (var prop in item) {
-                            if (prop !== 'timestamp') {
-                                var target;
-                                for (var i in data) {
-                                    if (data[i].name == prop) {
-                                        target = data[i];
-                                        break;
-                                    }
-                                }
-                                target.data.push(parseFloat(item[prop][dataname]));
+                            if (prop !== 'timestamp' && prop === dbinstname) {
+                                data.forEach(function(one) {
+                                   switch(one.name) {
+                                       case '总大小(GB)':
+                                           one.data.push(parseFloat(item[prop].TotalSize));
+                                           break;
+                                       case '已使用(GB)':
+                                           one.data.push(parseFloat(item[prop].Used));
+                                           break;
+                                       case '使用率(%)':
+                                           one.data.push(parseFloat(item[prop].UsedPercent));
+                                           break;
+                                       case '空闲(GB)':
+                                           one.data.push(parseFloat(item[prop].Free));
+                                           break;
+                                   }
+                                });
                             }
                         }
                     });
@@ -415,21 +421,34 @@ angular.
                         $scope.DBData = data[0];
                     }
 
+                    $scope.DBInstNames = [];
+                    var tableSpaceAry = $scope.DBData.TableSpace;
+                    for (var prop in tableSpaceAry[tableSpaceAry.length - 1]) {
+                        if ( prop !== 'timestamp') {
+                            $scope.DBInstNames.push(prop);
+                        }
+                    }
+
                 }).error(function(err) {
 
                 });
             };
 
-            $scope.DBShowType = function() {
+            $scope.DBShowHistory = function() {
                 myDBChart = echarts.init(document.getElementById('DBChart'));
-                updateDBChart(myDBChart, $scope.DBData, $scope.selectedDBType)
+                updateDBChart(myDBChart, $scope.DBData, $scope.selectedDBInstName)
             };
 
-            $scope.filterTimestamp = function(items) {
-                var result = {};
+            $scope.toArrayAndFilterTimestamp = function(items) {
+                var result = [];
                 angular.forEach(items, function(value, key) {
                     if (key !== 'timestamp') {
-                        result[key] = value;
+                        var obj = {};
+                        obj.tableSpaceName = key;
+                        for (var prop in value) {
+                            obj[prop] = value[prop];
+                        }
+                        result.push(obj);
                     }
                 });
                 return result;
@@ -440,11 +459,7 @@ angular.
                 myDBChart.resize;
             };
 
-            $scope.test = {
-                a: 1,
-                b: 2,
-                c: 3
-            };
+
     }]
 });
 
