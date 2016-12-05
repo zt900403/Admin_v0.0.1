@@ -2,7 +2,7 @@
 
     <div class="row" style="padding-top:20px">
 
-        <div class="col-lg-6" ng-show="$root.me.others.includes('createFile')">
+        <div class="col-lg-6" ng-show="isIncludes($root.me.others, 'createFile')">
             <div class="panel panel-default">
                 <div class="panel-heading">
                     创建报表
@@ -37,7 +37,7 @@
             </div>
             <!-- /.panel -->
         </div>
-        <div class="col-lg-6" ng-show="$root.me.others.includes('deleteFile')">
+        <div class="col-lg-6" ng-show="isIncludes($root.me.others, 'deleteFile')">
             <div class="panel panel-default">
                 <div class="panel-heading">
                     删除报表

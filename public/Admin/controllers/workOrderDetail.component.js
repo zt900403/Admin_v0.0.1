@@ -68,8 +68,7 @@ angular.
                             };
                             workorder.history.push(thishistory);
 
-                            self.data.acceptor = acceptor;
-                            self.data.history.push(thishistory);
+
 
                             var fd = new FormData();
                             fd.append('workorder', JSON.stringify(workorder));
@@ -82,11 +81,14 @@ angular.
                                     + Base64.encode($rootScope.me.user + ':' + $rootScope.me.PWD)
                                 }
                             }).success(function(result){
-                                that.remove();
+                                self.data.acceptor = acceptor;
+                                self.data.history.push(thishistory);
                                 dialog.setMessage(result.result);
                             }).error(function(err) {
                                 dialog.setType(BootstrapDialog.TYPE_DANGER);
                                 dialog.setMessage(err.err);
+                            }).finally(function() {
+                                that.remove();
                             });
                         }
                     }, {
@@ -129,9 +131,7 @@ angular.
                             };
                             workorder.history.push(thishistory);
 
-                            self.data.acceptor = 'none';
-                            self.data.history.push(thishistory);
-                            self.data.status = '完结';
+
 
                             var fd = new FormData();
                             fd.append('workorder', JSON.stringify(workorder));
@@ -144,11 +144,15 @@ angular.
                                     + Base64.encode($rootScope.me.user + ':' + $rootScope.me.PWD)
                                 }
                             }).success(function(result){
-                                that.remove();
+                                self.data.acceptor = 'none';
+                                self.data.history.push(thishistory);
+                                self.data.status = '完结';
                                 dialog.setMessage(result.result);
                             }).error(function(err) {
                                 dialog.setType(BootstrapDialog.TYPE_DANGER);
                                 dialog.setMessage(err.err);
+                            }).finally(function() {
+                                that.remove();
                             });
                         }
                     }, {

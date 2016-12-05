@@ -88,4 +88,11 @@ angular.module('AdminApp').controller('TableConfigCtrl', ['$rootScope', '$scope'
             }
         });
     };
+
+    $scope.isIncludes = function(array, element) {
+        if (!array) {
+            return false;
+        }
+        return array.indexOf(element) !== -1;
+    };
 }]);

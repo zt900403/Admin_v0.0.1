@@ -43,15 +43,14 @@
     <div class="navbar-default sidebar" role="navigation" ng-if="$root.me" ng-init="initMetisMenu()">
         <div class="sidebar-nav navbar-collapse">
             <ul class="nav" id="side-menu">
-
+                <!--
                 <li class="sidebar-search">
                     <div class="input-group custom-search-form has-feedback has-feedback-left">
                         <input type="text" class="form-control" placeholder="Search..." ng-model="search">
                         <i class="form-control-feedback glyphicon glyphicon-search"></i>
                     </div>
-
                 </li>
-
+                -->
                 <!-- <li>
                      <a href="index.html"><i class="fa fa-dashboard fa-fw"></i> Dashboard</a>
                  </li> -->
@@ -59,22 +58,19 @@
                     <a id="navTable" href="/Admin/#/" ng-init="siderNavBarInit()"><i class="fa fa-table fa-fw" ></i> 报表<span class="fa arrow"></span></a>
                     <ul class="nav nav-second-level pre-scrollable" style="max-height:550px;">
                         <li>
-                            <a href="#/" ng-repeat="file in files | filter : search"  ng-click="loadFile(file.filename)">{{file.filename}}
+                            <a href="#/" ng-repeat="file in files"  ng-click="loadFile(file.filename)">{{file.filename}}
                                 <i ng-if="file.locked != 'unlocked'" class="fa fa-lock" ></i>
                                 <i ng-if="file.locked == $root.me.user" class="fa fa-user" ></i>
                             </a>
                         </li>
                         <li class="nav-divider"></li>
-                        <li ng-show="$root.me.others.includes('createFile') ||
-                            $root.me.others.includes('deleteFile')">
+                        <li ng-show="isIncludes($root.me.others, 'createFile') ||
+                            isIncludes($root.me.others, 'deleteFile')">
                             <a href="#/tableConfig"><i class="fa fa-cog"></i>&nbsp;&nbsp;设&nbsp;置</a>
                         </li>
                     </ul>
                 </li>
-                <li>
-                    <a href="/Admin/#/workOrderCenter"><i class="fa fa-file-text-o fa-fw" ></i>工单中心<span class="fa arrow"></span></a>
-                </li>
-                <li ng-show="$root.me.others.includes('RoleEditAndAuth')">
+                <li ng-show="isIncludes($root.me.others, 'RoleEditAndAuth')">
                     <a href="/Admin/#/"><i class="fa fa-user fa-fw" ></i>用户管理<span class="fa arrow"></span></a>
                     <ul class="nav nav-second-level pre-scrollable" style="max-height:550px;">
                         <li>
@@ -85,6 +81,13 @@
                         </li>
                     </ul>
                 </li>
+                <li>
+                    <a href="/Admin/#/chart"><i class="fa fa-bar-chart fa-fw"></i>图表</a>
+                </li>
+                <li>
+                    <a href="/Admin/#/workOrderCenter"><i class="fa fa-file-text-o fa-fw" ></i>工单中心</a>
+                </li>
+
 
             </ul>
         </div>

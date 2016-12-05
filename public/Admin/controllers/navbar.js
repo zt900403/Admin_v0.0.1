@@ -52,4 +52,11 @@ angular.module('navbar').controller('NavbarCtrl', ['$rootScope', '$scope', '$htt
         }, 0);
     };
 
+    $scope.isIncludes = function(array, element) {
+        if (!array) {
+            return false;
+        }
+        return array.indexOf(element) !== -1;
+    };
+
 }]);

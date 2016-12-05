@@ -6,6 +6,9 @@ var User = require('../libs/User');
 var File = require('../libs/File');
 var Role = require('../libs/Role');
 var WorkOrder = require('../libs/WorkOrder');
+var Host = require('../libs/Host');
+var Database = require('../libs/Database');
+
 var basicAuth = require('basic-auth');
 
 var multiparty = require('multiparty');
@@ -246,7 +249,7 @@ router.post('/updateWorkOrder', function(req, res, next) {
         WorkOrder.findOne({version: workorder.version}, {version:1}, function(err, result) {
             if (err) return res.status(400).json({err: err.message});
             if (!result || workorder.version !== result.version) {
-                res.status(400).json({err: '工单已被别人处理,请刷新页面!'});
+                return res.status(400).json({err: '工单已被别人处理,请刷新页面!'});
             }
             workorder.MTime = Date.now();
             workorder.version++;
@@ -255,6 +258,34 @@ router.post('/updateWorkOrder', function(req, res, next) {
                 res.json({result: '提交成功!'});
             });
         });
+    });
+});
+
+router.get('/getAllMonitorHostsIP', function(req, res, next) {
+    Host.find({}, {IP:1}, function(err, hosts) {
+        if (err) return res.status(400).json({err: err.message});
+        res.json(hosts);
+    });
+});
+
+router.get('/getMonitorHostDataByIP', function(req, res, next) {
+    Host.find({IP: req.query.ip}, {}, function(err, host) {
+        if (err) return res.status(400).json({err: err.message});
+        res.json(host);
+    });
+});
+
+router.get('/getAllMonitorDBInstance', function(req, res, next) {
+    Database.find({}, {DBInstance:1}, function(err, DBs) {
+        if (err) return res.status(400).json({err: err.message});
+        res.json(DBs);
+    });
+});
+
+router.get('/getMonitorDBDataByDBname', function(req, res, next) {
+    Database.find({DBInstance: req.query.dbname}, {}, function(err, data) {
+        if (err) return res.status(400).json({err: err.message});
+        res.json(data);
     });
 });
 

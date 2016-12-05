@@ -69,3 +69,19 @@ exports.workOrder.prototype.toJSON = function() {
         relevantPeople: this.relevantPeople
     }
 };
+
+exports.host = mongoose.model('host', require('./host'));
+exports.host.prototype.toJSON = function() {
+    return {
+        IP: this.IP,
+        disk: this.disk
+    }
+};
+
+exports.database = mongoose.model('database', require('./database'));
+exports.database.prototype.toJSON = function() {
+    return {
+        DBInstance: this.DBInstance,
+        TableSpace: this.TableSpace
+    }
+};

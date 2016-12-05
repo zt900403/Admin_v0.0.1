@@ -31,6 +31,9 @@ angular.module('AdminApp').config(function($routeProvider) {
     when('/workOrderCenter/:workorderID', {
         template: '<workorder-Detail></workorder-Detail>'
     }).
+    when('/chart', {
+        template: '<chart></chart>'
+    }).
     otherwise({
         redirectTo: '/login'
     });
