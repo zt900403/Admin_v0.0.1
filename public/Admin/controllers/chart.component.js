@@ -101,13 +101,7 @@ angular.
                 var itemStyle = {
                     "normal": {
                         "barBorderRadius": 0,
-                        "label": {
-                            "show": true,
-                            "position": "insideBottom",
-                            formatter: function(p) {
-                                return p.value > 0 ? ('已使用 ' + p.value + '%') : '';
-                            }
-                        }
+
                     }
                 };
 
@@ -128,18 +122,7 @@ angular.
                         "stack": "总量",
                         symbolSize:10,
                         symbol:'circle',
-                        "itemStyle": {
-                            "normal": {
-                                "barBorderRadius": 0,
-                                "label": {
-                                    "show": true,
-                                    "position": "top",
-                                    formatter: function(p) {
-                                        return p.value > 0 ? ('总使用(TB): ' + p.value.toFixed(3)) : '';
-                                    }
-                                }
-                            }
-                        },
+
                         data: []
                     };
                     chartData.disk.forEach(function(item) {
