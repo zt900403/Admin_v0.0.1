@@ -34,6 +34,9 @@ angular.module('AdminApp').config(function($routeProvider) {
     when('/chart', {
         template: '<chart></chart>'
     }).
+    when('/dayAccountChart', {
+        template: '<day-Account-Chart></day-Account-Chart>'
+    }).
     otherwise({
         redirectTo: '/login'
     });
