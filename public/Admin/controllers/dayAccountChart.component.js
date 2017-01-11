@@ -11,6 +11,12 @@ module('dayAccountChart', ['ngRoute', 'AdminApp'])
         templateUrl: 'pages/dayAccountChart.html',
         controller: ['$rootScope', '$scope', '$http', 'Base64',
             function($rootScope, $scope, $http, Base64) {
+                $scope.interfaceName = '--';
+
+                $scope.showCrosswise = function() {
+                    $scope.interfaceName = '横向';
+                };
+
                 var myInterfaceMapChart = echarts.init(document.getElementById('dayInterfacesMap'));
                 option = {
                     backgroundColor: '#404a59',
@@ -53,7 +59,9 @@ module('dayAccountChart', ['ngRoute', 'AdminApp'])
                     ]
                 };
                 myInterfaceMapChart.on('click', function(param) {
-                    alert(param.name);
+                    $scope.$apply(function() {
+                        $scope.interfaceName = param.name;
+                    })
                 });
                 myInterfaceMapChart.setOption(option);
 
